@@ -1,0 +1,80 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage[headings]{fancyhdr}
+
+\fancypagestyle{fancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{Chapter \thechapter. ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection\ ##1}}
+}
+
+\fancypagestyle{myotherfancy}[fancydefault]{
+}
+
+\pagestyle{headings}
+\markboth{Myheadings Leftmark (Right side of left page)}{Markboth Right?}
+\markright{Myheadings Rightmark (Left side of right page)}
+
+\begin{document}
+
+\tableofcontents
+
+\chapter{Introduction}
+\thispagestyle{headings}
+\lipsum[1]
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+\lipsum[3-5]
+
+\newpage
+\pagestyle{fancy}
+\chapter{Another chapter}
+
+Here we switch to page style \texttt{fancy}. The headers should come out as:
+
+Right header on even page:
+\begin{quote}
+  \textsl{Chapter 2. Another chapter}
+\end{quote}
+Left header on odd page:
+\begin{quote}
+  \textsl{2.1 Another section}
+\end{quote}
+These come out as \textsl{slanted}, because that is the default for page style \texttt{myheadings} (as well as the default for page style \texttt{fancy}).
+The page number comes on the other side of the header.
+
+\lipsum[1]
+
+\section{Another section}
+
+\lipsum
+
+\newpage
+\pagestyle{myotherfancy}
+\chapter{Third chapter}
+
+Here we switch to page style \texttt{myotherfancy}. Here we use the original page style \texttt{fancy} headers. The headers should come out as:
+
+Right header on even page:
+\begin{quote}
+  \textsl{CHAPTER 3. THIRD CHAPTER}
+\end{quote}
+Left header on odd page:
+\begin{quote}
+  \textsl{3.1. YA SECTION}
+\end{quote}
+These come out as \textsl{slanted}, because that is the default for page style \texttt{myheadings} (as well as the default for page style \texttt{fancy}).
+The page number comes on the other side of the header.
+
+\lipsum[1]
+
+\section{YA section}
+
+\lipsum
+
+\end{document}

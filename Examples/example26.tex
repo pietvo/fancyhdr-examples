@@ -1,0 +1,99 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{afterpage}
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\textsl{\rightmark}}
+\fancyhead[LO,RE]{\textsl{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\fancypagestyle{myfancy}{
+  \fancyhead[LE,RO]{\textbf{MYFANCY SECTION}}
+  \fancyhead[LO,RE]{\textbf{MYFANCY CHAPTER}}
+  \fancyfoot[C]{\textbf{--~\thepage~--}}
+}
+
+\begin{document}
+\tableofcontents
+
+\bigskip
+
+\thispagestyle{plain}
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 26 in the fancyhdr documentation.
+
+It demonstrates \verb|\thispagestyle| in \verb|\afterpage|.
+
+On page~\pageref{setafterpage} we call \verb|\afterpage|:
+\begin{verbatim}
+\afterpage{%
+  This page will have page style \textbf{myfancy} inserted by
+  \texttt{\textbackslash afterpage}.
+  \\[2ex]
+  \thispagestyle{myfancy}
+}
+\end{verbatim}
+and then on the next page (page~\pageref{afterpage})
+ the page style will be \texttt{myfancy} as defined by:
+\begin{verbatim}
+\fancypagestyle{myfancy}{
+  \fancyhead[LE,RO]{\textbf{MYFANCY SECTION}}
+  \fancyhead[LO,RE]{\textbf{MYFANCY CHAPTER}}
+  \fancyfoot[C]{\textbf{--~\thepage~--}}
+}
+\end{verbatim}
+
+\end{boxedminipage}
+
+\pagestyle{headings}
+
+\chapter{Introduction}
+
+\bigskip
+
+\lipsum[1]
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+%% Here we use \afterpage to set the page style for the next page (only)
+
+\label{setafterpage}\textbf{NEXT PAGE SHOULD HAVE PAGE STYLE MYFANCY}
+\afterpage{%
+  This page will have page style \textbf{myfancy} inserted by
+  \texttt{\textbackslash afterpage}.
+  \\[2ex]\label{afterpage}
+  \thispagestyle{myfancy}
+}
+
+\lipsum[3-5]
+
+
+\section{Another section}
+
+
+\bigskip
+
+\lipsum[6-8]
+
+\bigskip
+Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fer- mentum eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non, pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
+
+\bigskip
+
+Donec odio elit, dictum in, hendrerit sit amet, egestas sed, leo.
+
+\bigskip
+
+\lipsum[8-9]
+
+\end{document}

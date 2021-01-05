@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage[compatV3]{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\fancyhead[R]{\leftmark\\\rightmark}
+\fancyhead[L]{\thepage}
+\renewcommand{\headrule}{\vbox to 0pt{\hbox to\headwidth{\dotfill}\vss}}
+
+\begin{document}
+
+\section{Introduction}
+
+Header to tall for \verb|\headheight|. With \texttt{compatV3} option it causes pages to be inconsistent (page 2 ff.\ shifted down).
+
+\subsection{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum
+
+\subsection{Another subsection}
+
+\lipsum[3]
+
+\end{document}

@@ -1,0 +1,37 @@
+\documentclass[twoside]{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[RO,LE]{\textbf{The performance of new graduates}}
+\fancyfoot{} % clear all footer fields
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{From: K. Grant}
+\fancyfoot[CO,RE]{To: Dean A. Smith}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\fancypagestyle{plain}{
+  \fancyhf{} % clear all header and footer fields
+  \fancyfoot[C]{\textbf{--~\thepage~--}} % except the center
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\begin{document}
+\section*{Redefine \texttt{plain} -- bold page number}
+\label{sec:twosided}
+\thispagestyle{plain}
+
+\begin{boxedminipage}{\textwidth}
+This is example 4 in the fancyhdr documentation. It has simple headers and footers like example 3:
+On odd pages the header has {``\textbf{The performance of new graduates}''} in the right-hand side corner and the footer has ``From: K. Grant'' on the left, ``To: Dean A. Smith'' in the center, and the page number on the right. Just like example 1. On even pages it is mirrored:  the header has {``\textbf{The performance of new graduates}''} in the left-hand side corner and the footer has ``From: K. Grant'' on the right, ``To: Dean A. Smith'' in the center, and the page number on the left.
+
+However, the first page has a redefined \texttt{plain} page style: It only has the page number in the center of the footer, in bold and surrounded by en-dashes. No header, no decorative rules.
+\end{boxedminipage}
+
+\bigskip
+
+\lipsum
+\end{document}

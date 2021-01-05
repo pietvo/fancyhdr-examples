@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage{fourier-orns}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{14.4pt}
+
+\renewcommand\headrule{\vspace{-6pt}\hrulefill
+ \raisebox{-2.1pt}
+   {\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+
+\renewcommand\footrule{\hrulefill
+\raisebox{-2.1pt}
+  {\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+
+\begin{document}
+
+\tableofcontents
+
+\section{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is example 17 in the fancyhdr documentation.\\
+Using defaults in article class but with fourier decoration in \verb|\headrule| and \verb|\footrule|.
+\begin{verbatim}
+\usepackage{fourier-orns}
+ . . .
+\renewcommand\headrule{\vspace{-6pt}\hrulefill
+ \raisebox{-2.1pt}
+   {\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+
+\renewcommand\footrule{\hrulefill
+\raisebox{-2.1pt}
+  {\quad\decofourleft\decotwo\decofourright\quad}\hrulefill}
+\end{verbatim}
+\end{boxedminipage}
+
+\subsection{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum
+
+
+\end{document}

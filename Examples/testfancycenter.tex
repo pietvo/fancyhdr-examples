@@ -1,0 +1,75 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{calc}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[c]{\fancycenter{AAA}{BBBBBBBBBBBBBBB}{CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC}}
+\fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+
+\fancypagestyle{plain}{%
+    \fancyhead{} % get rid of headers
+    \renewcommand{\headrulewidth}{0pt} % and the line
+}
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\begin{boxedminipage}{\textwidth}
+This document is a test for the \verb|\fancycenter| command. It puts a header with 3 fields in an extended header, including the margin par area. It also redefines pagestyle \texttt{plain}.
+\begin{verbatim}
+\fancyhf{}
+\fancyhead[c]{\fancycenter{AAA}{BBBBBBBBBBBBBBB}
+               {CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC}}
+\fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+Here comes a marginpar.
+\marginpar{Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+\lipsum
+
+
+
+\section{The Problem}
+\label{sec:problem}
+
+Here comes a marginpar.
+\marginpar{Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+\lipsum[1]
+
+\section{Evaluation}
+
+Here comes a marginpar.
+\marginpar{Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+
+\section{Another section}
+
+Here comes a marginpar.
+\marginpar{Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+\lipsum[3]
+
+\end{document}

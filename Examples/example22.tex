@@ -1,0 +1,63 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{ifthen}
+\usepackage{lastpage}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot[C]{\thepage\ of \pageref{LastPage}}
+\fancyfoot[R]{\ifthenelse{\isodd{\value{page}} \and \not
+     \( \value{page}=\pageref{LastPage} \) }{please turn over}{}}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+\begin{document}
+
+\tableofcontents
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 22 in the fancyhdr documentation.
+
+We use the page number style ``n of m'' where ``m'' is the number of pages. This is done using the \texttt{lastpage} package. As we want the same style on chapter opening pages, and others that use the \texttt{plain} page style, we redefine the \texttt{plain} page style with \verb|\fancypagestyle|.
+
+To get all this working you usually have to do one additional \LaTeX{} run.
+
+\begin{verbatim}
+\usepackage{lastpage}
+ . . .
+\fancyfoot[C]{\thepage\ of \pageref{LastPage}}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+\end{verbatim}
+
+This example also puts  ``Please turn over'' in the righthand side footer on odd pages, except the last page. This is done with the following code:
+
+\begin{verbatim}
+\usepackage{ifthen}
+ . . . 
+\fancyfoot[R]{\ifthenelse{\isodd{\value{page}} \and \not
+     \( \value{page}=\pageref{LastPage} \) }{please turn over}{}}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+\end{document}

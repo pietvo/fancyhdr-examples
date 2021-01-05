@@ -1,0 +1,53 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{makeidx}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\rightmark}
+\fancyhead[LO,RE]{\leftmark}
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\makeindex
+
+\begin{document}
+\chapter{Introduction}
+
+\index{lipsum}
+\begin{boxedminipage}{\textwidth}
+This is example 6 in the fancyhdr documentation. 
+This demonstrates the use of \verb|\chaptermark| and \verb|\sectionmark|. In contrast to the standard \LaTeX{} definitions, we don't use \verb|\MakeUppercase|.
+\begin{verbatim}
+\fancyhead[LE,RO]{\rightmark}
+\fancyhead[LO,RE]{\leftmark}
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\end{verbatim}
+On the Index page the header will still be ``INDEX'' in uppercase because the \texttt{book} class uses \verb|\MakeUppercase| for the  \verb|\chaptermark| in Index, Bibliography, etc.
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum[2]
+
+\chapter{Implementation}
+
+Introduction of this chapter
+
+\lipsum[3]
+
+\section{First steps}
+\label{sec:first-steps}
+
+\lipsum
+\printindex
+\newpage
+``INDEX'' should be in header in uppercase.
+\end{document}

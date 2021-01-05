@@ -1,0 +1,140 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage{float}
+\floatstyle{ruled}
+\restylefloat{table}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[r]{\iftopfloat{This page has a topfloat}{There is no topfloat here}}
+\fancyfoot[r]{\ifbotfloat{There is a float at the bottom}{}}
+\fancyfoot[l]{\iffootnote{There is a footnote here}{There is no footnote here}}
+\fancyhead[l]{\iffloatpage{This is a floatpage}{}}
+\renewcommand{\headrulewidth}{\iftopfloat{0pt}{0.4pt}}
+\begin{document}
+
+\section{Introduction}
+\thispagestyle{plain}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 21 in the fancyhdr documentation.
+
+This tests the \verb|\iftopfloat|, \verb|\ifbotfloat|, \verb|\iffootnote| and \verb|\iffloatpage| commands.
+
+The headers and footers indicate if the page is a float page, and whether there are top floats, bottom floats and/or footnotes.
+
+There is a decorative line in the header, except on pages with a top float.
+
+\begin{verbatim}
+\fancyhead[r]{\iftopfloat{This page has a topfloat}
+                         {There is no topfloat here}}
+\fancyfoot[r]{\ifbotfloat{There is a float at the bottom}{}}
+\fancyfoot[l]{\iffootnote{There is a footnote here}
+                         {There is no footnote here}}
+\fancyhead[l]{\iffloatpage{This is a floatpage}{}}
+\renewcommand{\headrulewidth}{\iftopfloat{0pt}{0.4pt}}
+\end{verbatim}
+
+There is also a page with no headers and footers. Note the use of \verb|\begingroup| \ldots \verb|\endgroup| to restrict the redefinition of the page style.
+
+\begin{verbatim}
+\clearpage
+\begingroup
+\pagestyle{empty}
+ . . .
+\cleardoublepage
+\endgroup
+\end{verbatim}
+
+\subsection{Overview}
+\begin{description}
+\item [Page 2] top float and footnote
+\item [Page 3] only bottom float
+\item [Page 4] ``empty'' page
+\item [Page 5] no floats, no footnote
+\item [Page 6] float page, which implies both a top float and a bottom float
+\end{description}
+
+\end{boxedminipage}
+
+\newpage
+
+Here is some text\footnote{Here is some footnote}
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+
+\lipsum
+
+\begin{table}[b]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+\lipsum[1]
+\clearpage
+\begingroup
+\pagestyle{empty}\mbox{}
+   \vspace*{\fill}
+   \begin{center}
+     This page intentionally contains only this sentence.\\
+     No headers -- no footers.
+   \end{center}
+   \vspace{\fill}
+\cleardoublepage
+\endgroup
+\begin{table}[p]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+
+\begin{table}[p]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+
+\begin{table}[p]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+
+\begin{table}[p]
+  \centering
+  \begin{tabular}{lcr}
+    left & center & right \\
+    left & center & right \\
+    left & center & right \\
+  \end{tabular}
+  \caption{Test table}
+\end{table}
+ 
+\lipsum[2]
+More text
+\end{document}

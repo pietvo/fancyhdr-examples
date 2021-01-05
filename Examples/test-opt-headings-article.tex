@@ -1,0 +1,51 @@
+\documentclass[twoside]{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[headings]{fancyhdr}
+\pagestyle{headings}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-opt-headings-article.tex
+
+  It demonstrates the \texttt{[headings]} option of \texttt{fancyhdr} in
+  the \texttt{article} class.
+
+\begin{verbatim}
+\usepackage[headings]{fancyhdr}
+\pagestyle{headings}
+\end{verbatim}
+\end{boxedminipage}
+
+\section{Introduction}
+
+\lipsum
+
+\subsection{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum[2-4]
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+\subsection{Another section}
+
+\lipsum[3]
+
+\end{document}

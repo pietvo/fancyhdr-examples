@@ -1,0 +1,43 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[headings]{fancyhdr}
+\pagestyle{headings}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-opt-headings-book.tex
+
+  It demonstrates the \texttt{[headings]} option of \texttt{fancyhdr} in
+  the \texttt{book} class.
+
+\begin{verbatim}
+\usepackage[headings]{fancyhdr}
+\pagestyle{headings}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum[2-4]
+
+\section{Another section}
+
+\lipsum[3]
+
+\end{document}

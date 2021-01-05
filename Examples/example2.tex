@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L,C]{}
+\fancyhead[R]{\textbf{The performance of new graduates}}
+\fancyfoot[L]{From: K. Grant}
+\fancyfoot[C]{To: Dean A. Smith}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\begin{document}
+\thispagestyle{plain}
+
+\section*{First page without headers (pagestyle \texttt{plain})}
+\label{sec:first-page-without}
+
+\begin{boxedminipage}{\textwidth}
+This is example 2 in the fancyhdr documentation. It has simple headers and footers:
+The header has {``\textbf{The performance of new graduates}''} in the right-hand side corner.
+The footer has ``From: K. Grant'' on the left, ``To: Dean A. Smith'' in the center, and the page number on the right. And the footer has a thicker (2pt) line. Left and right pages are the same.
+
+This is like example 1, but on the first page the pagestyle \texttt{plain} is used.
+\end{boxedminipage}
+
+\bigskip
+
+\lipsum
+\end{document}

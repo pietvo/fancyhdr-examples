@@ -1,0 +1,42 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\rightmark}
+\fancyhead[LO,RE]{\leftmark}
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\MakeUppercase{\chaptername\ \thechapter.\ #1}}{}}
+\begin{document}
+\chapter{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is example 10 in the fancyhdr documentation. 
+This demonstrates the use of \verb|\chaptermark|.
+\begin{verbatim}
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\MakeUppercase{\chaptername\ \thechapter.\ #1}}{}}
+\end{verbatim}
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum[2]
+
+\chapter{Implementation}
+
+Introduction of this chapter
+
+\lipsum[3]
+
+\section{First steps}
+\label{sec:first-steps}
+
+\lipsum
+
+\end{document}

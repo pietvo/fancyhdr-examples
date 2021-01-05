@@ -1,0 +1,47 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[myheadings]{fancyhdr}
+\pagestyle{myheadings}
+\markboth{Myheadings Leftmark}{Markboth Right}
+\markright{Myheadings Rightmark}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-opt-myheadings-book.tex
+
+  It demonstrates the \texttt{[myheadings]} option of \texttt{fancyhdr} in
+  the \texttt{book} class.
+
+\begin{verbatim}
+\usepackage[myheadings]{fancyhdr}
+\pagestyle{myheadings}
+\markboth{Myheadings Leftmark}{Markboth Right}
+\markright{Myheadings Rightmark}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum[2-4]
+
+\section{Another section}
+
+\lipsum[3]
+
+\end{document}

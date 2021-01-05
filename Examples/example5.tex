@@ -1,0 +1,27 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\begin{document}
+\chapter{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is example 5 in the fancyhdr documentation. It has the default fancyhdr headers and footers in \texttt{book.cls}:
+
+On the pages where new chapters start, we get a centered page number in
+the footer; there is no header, and there are no decorative lines (page style \texttt{plain}).
+
+On other odd pages the header has the chapter title in the left-hand side corner and the section title in the right-hand side corner. The footer has the page number in the center. On even pages it is mirrored:  the chapter title in the right-hand side corner and the section title in the left-hand side corner. Both titles are in slanted, uppercase text. There is a decorative line under the header, but not above the footer.
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+\end{document}

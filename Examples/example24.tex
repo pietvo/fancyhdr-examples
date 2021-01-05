@@ -1,0 +1,69 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\newcommand{\TheAuthor}{}
+\newcommand{\Author}[1]{\renewcommand{\TheAuthor}{#1}\textbf{\large\TheAuthor}\vspace{1cm}\par}
+\fancyhead[LE,RO]{\TheAuthor}
+
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 24 in the fancyhdr documentation.
+
+Each chapter is written by a different author
+and we want the name of the author in the header opposite the chapter
+title. We define the \verb|\Author| command to set the author name in the macro \verb|\TheAuthor|.
+We also let that command typeset the author name under the chapter title, so we use the following commands:
+
+\begin{verbatim}
+\newcommand{\TheAuthor}{}
+\newcommand{\Author}[1]{\renewcommand{\TheAuthor}{#1}
+                    \textbf{\large\TheAuthor}\vspace{1cm}\par}
+\fancyhead[LE,RO]{\TheAuthor}
+ . . .
+\chapter{Chapter Title}
+\Author{Author Name}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagenumbering{arabic}
+\chapter{Introduction}
+\Author{K.N. Uth}
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+\chapter{Another chapter}
+\Author{L.A.M. Port}
+\label{cha:another-chapter}
+
+\lipsum[2]
+
+\section{Another section}
+
+\lipsum[3-5]
+
+\end{document}

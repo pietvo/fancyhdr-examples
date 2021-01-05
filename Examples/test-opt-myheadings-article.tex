@@ -1,0 +1,55 @@
+\documentclass[twoside]{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[myheadings]{fancyhdr}
+\pagestyle{myheadings}
+\markboth{Myheadings Leftmark}{Markboth Right}
+\markright{Myheadings Rightmark}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-opt-myheadings-article.tex
+
+  It demonstrates the \texttt{[myheadings]} option of \texttt{fancyhdr} in
+  the \texttt{article} class.
+
+\begin{verbatim}
+\usepackage[myheadings]{fancyhdr}
+\pagestyle{myheadings}
+\markboth{Myheadings Leftmark}{Markboth Right}
+\markright{Myheadings Rightmark}
+\end{verbatim}
+\end{boxedminipage}
+
+\section{Introduction}
+
+\lipsum
+
+\subsection{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum[2-4]
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+\subsection{Another section}
+
+\lipsum[3]
+
+\end{document}

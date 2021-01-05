@@ -1,0 +1,87 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]%
+   {\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+\renewcommand{\sectionmark}[1]%
+   {\markright{\MakeUppercase{\thesection.\ #1}}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\helv}{%
+   \fontfamily{phv}\fontseries{b}\fontsize{9}{11}\selectfont}
+\fancyhf{}
+\fancyhead[LE,RO]{\helv \thepage}
+\fancyhead[LO]{\helv \rightmark}
+\fancyhead[RE]{\helv \leftmark}
+
+\def\ams/{\protect\pAmS}
+\def\pAmS{{\the\textfont2
+        A\kern-.1667em\lower.5ex\hbox{M}\kern-.125emS}}
+\def\amslatex/{\ams/-\LaTeX}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\begin{boxedminipage}{\textwidth}
+This is example 19 in the fancyhdr documentation.\\
+It is an approximation of the style used in the book 
+\textit{Math into LaTeX, An Introduction to \LaTeX{} and \amslatex/}, George Gratzer,Birkhauser, Boston.
+
+Chapter and section titles have a number and are in uppercase. The font is Helvetica 9pt bold.
+On an even page, the page number is printed as the left header and
+the chapter info as the right header; on an odd page, the section info
+is printed as the left header and the page number as the right header.  The
+center headers are empty.  There are no footers.
+
+There is a decorative line in the header.  It is 0.5pt wide.
+Chapter pages have no headers or footers. We do this by using \verb|\thispagestyle{empty}| after the \verb|\chapter| command.
+
+\begin{verbatim}
+\renewcommand{\chaptermark}[1]%
+   {\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+\renewcommand{\sectionmark}[1]%
+   {\markright{\MakeUppercase{\thesection.\ #1}}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\helv}{%
+   \fontfamily{phv}\fontseries{b}\fontsize{9}{11}\selectfont}
+\fancyhf{}
+\fancyhead[LE,RO]{\helv \thepage}
+\fancyhead[LO]{\helv \rightmark}
+\fancyhead[RE]{\helv \leftmark}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+\thispagestyle{empty}
+
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[3]
+
+\section{Evaluation}
+
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+
+\section{Another section}
+
+\lipsum[3]
+
+\end{document}

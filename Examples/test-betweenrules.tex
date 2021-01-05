@@ -1,0 +1,59 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+
+\setlength{\headheight}{35pt}
+\renewcommand{\headrulewidth}{2pt}
+\fancyhf{}
+\fancyhead[C]{%
+  \headrule
+  \vspace{12pt}
+  Project Description
+  \vspace{8pt}
+}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-betweenrules.tex.
+
+  It demonstrates a header with a rule above and below it. The rules are thicker. 
+  The spacing is a bit more than usual, so \verb|\headheigth| is increased.
+
+\begin{verbatim}
+\setlength{\headheight}{35pt}
+\renewcommand{\headrulewidth}{2pt}
+\fancyhf{}
+\fancyhead[C]{%
+  \headrule
+  \vspace{12pt}
+  Project Description
+  \vspace{8pt}
+}
+\end{verbatim}
+\end{boxedminipage}
+
+
+\chapter{Introduction}
+\thispagestyle{fancy}
+
+\lipsum[1]
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+\lipsum[3-5]
+
+\end{document}

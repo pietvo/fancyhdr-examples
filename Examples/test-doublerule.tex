@@ -1,0 +1,57 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+
+\pagestyle{fancy}
+
+\setlength{\headheight}{14pt}
+
+\fancyhf{}
+\fancyhead[C]{%
+  Project Description
+  \vspace{2pt}%
+  {\color{red}\headrule}%
+  \vspace{-8pt}%
+}
+
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-doublerule.tex.
+
+  It demonstrates a header with a double rule under it. The first rule
+  is red and the second is black.
+
+\begin{verbatim}
+\setlength{\headheight}{14pt}
+
+\fancyhf{}
+\fancyhead[C]{%
+  Project Description
+  \vspace{2pt}%
+  {\color{red}\headrule}%
+  \vspace{-8pt}%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+\lipsum[1]
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+\lipsum[3-5]
+
+\end{document}

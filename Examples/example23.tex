@@ -1,0 +1,58 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{chappg}
+\renewcommand{\chappgsep}{--}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 23 in the fancyhdr documentation.
+
+We use the page number style ``n--m'' where ``n'' is the chapter number and ``m'' is the page number (relative to the current chapter). 
+This is done using the \texttt{chappg} package. In the front matter (Table of Contents), we use small roman numerals.
+
+\begin{verbatim}
+\usepackage{chappg}
+\renewcommand{\chappgsep}{--}
+ . . .
+\pagenumbering{bychapter}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+\pagenumbering{bychapter}
+
+\lipsum
+
+\section{The Problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+\chapter{Another chapter}
+
+\lipsum[2]
+
+\section{Another section}
+
+\lipsum[3-5]
+
+\end{document}

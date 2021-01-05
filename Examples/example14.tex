@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr, extramarks}
+\fancyhead[R]{\leftmark}
+\pagestyle{fancy}
+
+\begin{document}
+\section{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is example 14 in the fancyhdr documentation.\\
+\textbf{Problem: The header  is the LAST section title, not the first one.}\\
+This demonstrates that \verb|\leftmark| uses the \textbf{last} mark on the page, which sometimes isn't nice. This can be solved by using the \texttt{extramarks} package and the command \verb|\firstleftmark|.
+\begin{verbatim}
+\usepackage{extramarks}
+ . . .
+\fancyhead[R]{\firstleftmark}
+\end{verbatim}
+\end{boxedminipage}
+
+\subsection{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum[2]
+
+\section{Another section}
+
+Some more text.
+
+\newpage
+\fancyhead[R]{\firstleftmark}
+
+\section{Introduction}
+
+{\bfseries Solution: Use \verb+\firstleftmark+\verb+: \fancyhead[R]{\firstleftmark}+}
+
+\subsection{The Problem}
+
+\lipsum[1]
+
+\subsection{Evaluation}
+
+\lipsum[2]
+
+\section{Another section}
+
+\lipsum[3-5]
+
+\end{document}

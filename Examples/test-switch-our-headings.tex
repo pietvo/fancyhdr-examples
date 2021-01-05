@@ -1,0 +1,267 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[headings]{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+\fancypagestyle{myfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+}
+
+\fancypagestyle{myotherfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+  \fancyhf{}
+  \fancyhead[LE]{\textbf{\rightmark}}
+  \fancyhead[RO]{\textbf{\leftmark}}
+  \fancyfoot[C]{\textbf{\thepage}}
+}
+
+\begin{document}
+
+\tableofcontents
+
+\newpage
+\thispagestyle{plain}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+  This is test-switch-our-headings.tex
+
+It demonstrates switching between page styles based on
+\texttt{fancyhdr} in the \texttt{book} class. We are switching between
+four page styles:\\ the \texttt{fancyhdr}-based page style
+\texttt{headings} (package option \texttt{headings}), our page style
+\texttt{fancy}, and two \texttt{fancyhdr}-based styles \texttt{myfancy}
+and \texttt{myotherfancy}, defined with \verb|\fancypagestyle|. And
+chapter opening pages use page style \texttt{plain}.
+  Here are the definitions:
+
+\begin{verbatim}
+\usepackage[headings]{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+\fancypagestyle{myfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+}
+
+\fancypagestyle{myotherfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+  \fancyhf{}
+  \fancyhead[LE]{\textbf{\rightmark}}
+  \fancyhead[RO]{\textbf{\leftmark}}
+  \fancyfoot[C]{\textbf{\thepage}}
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We start with page style \texttt{fancy} with the following headers:
+\begin{verbatim}
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+\end{verbatim}
+%
+Chapter pages: just page style \texttt{plain}.
+\\
+Even page, left:
+\begin{quote}
+  \textsl{1.1. The Problem} (= section number. section title)
+\end{quote}
+Even page, right:
+\begin{quote}
+  \textsl{1. Introduction} (= chapter number. chapter title)
+\end{quote}
+On odd pages it is mirrored, probably with a different section.
+
+These come out as \textsl{slanted}, because that is the default for page style \texttt{fancy}.
+The page number comes on the footer.
+\end{boxedminipage}
+\bigskip
+
+\lipsum[1]
+\newpage
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+\lipsum[3-5]
+
+\lipsum[6]
+
+\newpage
+\pagestyle{headings}
+\chapter{Second chapter}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+In this chapter we have switched to the fancyhdr-defined page style \texttt{headings}. The marks are different than in page style fancy. For example, they are in uppercase.
+
+{\bfseries Please note that because page style \texttt{headings} uses a different \verb|\chaptermark| than page style \texttt{fancy}, the switching of the page style must be done before the \verb|\chapter| command, and it must be preceded by a \verb|\newpage|, and this is also necessary in the following chapters.}
+\begin{verbatim}
+\newpage
+\pagestyle{headings}
+\chapter{Second chapter}
+\end{verbatim}
+
+The headers should come out as:
+\\
+Chapter pages: just page style \texttt{plain}.
+\\
+Right header on even page:
+\begin{quote}
+  \textsl{CHAPTER 2. SECOND CHAPTER}
+\end{quote}
+Left header on odd page:
+\begin{quote}
+  \textsl{2.1. ANOTHER SECTION}
+\end{quote}
+These come out as \textsl{slanted}, because that is the default for page style \texttt{fancy}.
+The page number comes on the other side of the header, not slanted.
+\end{boxedminipage}
+\bigskip
+
+\lipsum[1]
+
+\section{Another section}
+
+\lipsum
+
+\newpage
+\pagestyle{fancy}
+\chapter{Third chapter}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Here we switch back to page style \texttt{fancy}. 
+But we see that we still get the marks as defined in the page style \texttt{headings}.
+This is because the definitions of the marks are not part of page style \texttt{fancy}, but they are global in the document. The same is true for the layout of the headers (and footers).
+And, because in the previous chapter we had used the \texttt{fancyhdr} version of page style \texttt{headings}, and page style \texttt{fancy} does not change these, we get exactly the same as in the previous chapter.
+
+The headers should come out as:
+\\
+Chapter pages: just page style \texttt{plain}.
+\\
+Right header on even page:
+\begin{quote}
+  \textsl{CHAPTER 3. THIRD CHAPTER}
+\end{quote}
+Left header on odd page:
+\begin{quote}
+  \textsl{3.1. YA SECTION}
+\end{quote}
+On odd pages it is mirrored.
+These come out as \textsl{slanted}, because that is the default for page style \texttt{fancy}.
+The page number comes on the other side of the header.
+\end{boxedminipage}
+\bigskip
+
+\lipsum[1]
+
+\section{YA section}
+
+\lipsum
+
+\newpage
+\pagestyle{myfancy}
+\chapter{Fourth chapter}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Here we switch to page style \texttt{myfancy}. This has the definition of the marks inside.
+So we see that we get the marks as defined in the definition of this page style.
+\begin{verbatim}
+\fancypagestyle{myfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+}
+\end{verbatim}
+
+However, the layout of the headers and footers is not defined in page style \texttt{myfancy}. Therefore we get the layout as in the previous chapter (the ones from page style \texttt{headings}). 
+But because of our own marks, the contents of the headers are not in uppercase, and the word 'CHAPTER' is not present.
+
+The headers should come out as:
+\\
+Chapter pages: just page style \texttt{plain}.
+\\
+Right header on even page:
+\begin{quote}
+  \textsl{4. Fourth chapter}
+\end{quote}
+Left header on odd page:
+\begin{quote}
+  \textsl{4.1. YAno section}
+\end{quote}
+These come out as \textsl{slanted}, because that is the default for page style \texttt{fancy}.
+The page number comes on the other side of the header.
+
+Please note that the definition of \texttt{myfancy} does not include \verb|\fancyhead|. So it picks up whatever is current when it is invoked. It is generally better to include these definition, however.
+\end{boxedminipage}
+\bigskip
+
+\lipsum[1]
+
+\section{YAno section}
+
+\lipsum
+
+\newpage
+\pagestyle{myotherfancy}
+\chapter{Fifth chapter}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Here we switch to page style \texttt{myotherfancy}.
+Now we see that we get the marks as defined in the definition of page style \texttt{myotherfancy}.
+This is because the definitions of the marks and the headers are  part of that definition.
+\begin{verbatim}
+\fancypagestyle{myotherfancy}{
+  \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ ##1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection.\ ##1}}
+  \fancyhf{}
+  \fancyhead[LE]{\textbf{\rightmark}}
+  \fancyhead[RO]{\textbf{\leftmark}}
+  \fancyfoot[C]{\textbf{\thepage}}
+}
+\end{verbatim}
+
+And also, the layout of the headers and footers is  defined in this page style. It defines the headers and footers \textbf{bold} instead of slanted.
+The contents of the headers are not in uppercase, and the word 'CHAPTER' is not present.
+
+The headers should come out as:
+\\
+Chapter pages: just page style \texttt{plain}.
+\\
+Right header on odd page:
+\begin{quote}
+  \textbf{5. Fifth chapter}
+\end{quote}
+Left header on even page:
+\begin{quote}
+  \textbf{5.1. YAno section}
+\end{quote}
+The page number comes on the footer.
+These come out as \textbf{bold}.
+\end{boxedminipage}
+\bigskip
+
+\lipsum[1]
+
+\section{YAno section}
+
+\lipsum
+
+\end{document}

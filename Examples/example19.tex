@@ -1,0 +1,94 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{calc}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\textbf{\thepage}}
+\fancyhead[LO]{\textbf{\rightmark}}
+\fancyhead[RE]{\textbf{\leftmark}}
+\fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+\fancypagestyle{plain}{%
+    \fancyhead{} % get rid of headers
+    \renewcommand{\headrulewidth}{0pt} % and the line
+}
+\begin{document}
+
+\tableofcontents
+
+\bigskip
+
+\begin{boxedminipage}{\textwidth}
+This is example 19 in the fancyhdr documentation.\\
+It is an approximation of the style used in Leslie Lamport's \LaTeX{} book.
+The header has the width of the text plus the marginpar area. This time we do this by using \verb|\fancyheadoffset|.
+
+The header on even pages has the page number on the left, and the chapter title on the right. On odd pages it has the section title preceded by the section number on the left and the page number on the right. All in boldface.
+There is no footer. The \texttt{plain} style is redefined to have no header and no footer. (In the \LaTeX{} book this makes sense because each chapter begins with a page that contains only a drawing. In most other cases you probably would want a page number on the page.)
+\begin{verbatim}
+\usepackage{calc}
+ . . .
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\textbf{\thepage}}
+\fancyhead[LO]{\textbf{\rightmark}}
+\fancyhead[RE]{\textbf{\leftmark}}
+\fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+\fancypagestyle{plain}{%
+    \fancyhead{} % get rid of headers
+    \renewcommand{\headrulewidth}{0pt} % and the line
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\chapter{Introduction}
+
+\textbf{Here comes a marginpar.}
+\marginpar{\textbf{Marginpar.} Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+
+\lipsum
+
+\section{The Problem}
+\label{sec:problem}
+
+\textbf{Here comes a marginpar.}
+\marginpar{\textbf{Marginpar.} Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\textbf{Here comes a marginpar.}
+\marginpar{\textbf{Marginpar.} Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+
+\lipsum
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+Some more text.
+
+
+\section{Another section}
+
+\textbf{Here comes a marginpar.}
+\marginpar{\textbf{Marginpar.} Donec bibendum quam in tellus. Nullam cur- sus pulvinar
+  lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
+  pellentesque felis eu massa.}
+
+\lipsum[3]
+
+\end{document}
