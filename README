@@ -1,0 +1,5 @@
+This directory contains examples files for the package fancyhdr.
+The numbered 'Example<n>.tex' files are examples from the documentation
+(although in the current documentation they are not yet numbered).
+The others are various test cases, based on bug reports and
+questions that people have asked.
