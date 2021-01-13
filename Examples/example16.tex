@@ -9,7 +9,7 @@
 \fancyhead[R]{\leftmark\\\rightmark}
 \fancyhead[L]{\thepage}
 \renewcommand{\headrule}{\vbox to 0pt
-    {\hbox to\headwidth{\dotfill}\vss}}
+    {\makebox[\headwidth]{\dotfill}\vss}}
 
 \begin{document}
 
@@ -27,7 +27,7 @@ We use a two-line header with section name on top of subsection name. Also the h
 \fancyhead[R]{\leftmark\\\rightmark}
 \fancyhead[L]{\thepage}
 \renewcommand{\headrule}{\vbox to 0pt
-    {\hbox to\headwidth{\dotfill}\vss}}
+    {\makebox[\headwidth]{\dotfill}\vss}}
 \end{verbatim}
 \end{boxedminipage}
 
