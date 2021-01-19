@@ -1,0 +1,47 @@
+\documentclass[twoside]{article}
+
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{LEFT HEADER}
+\fancyhead[R]{RIGHT HEADER}
+\fancyfoot[L]{LEFT FOOTER}
+\fancyfoot[R]{RIGHT FOOTER}
+\addtolength{\headwidth}{1cm}
+
+\begin{document}
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is a test for various ways to change and use \verb|\headwidth| for both headers and footer.
+
+On the first two pages we enlarge the \verb|\headwidth| with 1~cm. 
+\begin{verbatim}
+\addtolength{\headwidth}{1cm}
+\end{verbatim}
+As this is a two-sided document, the header and footer will stick out on the right for odd pages and on the left for even pages.
+
+\end{boxedminipage}
+
+\bigskip
+
+\lipsum[1-9]
+
+\newpage
+\fancyheadoffset[LR]{1cm}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+On the following pages we enlarge the headers with
+\begin{verbatim}
+\fancyheadoffset[LR]{1cm}
+\end{verbatim}
+So  the header and footer will stick out on both sides for 1~cm on all pages.
+As the footer doesn't have offsets defined, its width reverts to the original \verb|\textwidth|.
+So the enlarged \verb|\headwidth| from the beginning of the document will not be used once a \verb|\fancy...offset| is given.
+\end{boxedminipage}
+ 
+\bigskip
+
+\lipsum
+\end{document}
