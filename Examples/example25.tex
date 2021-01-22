@@ -20,8 +20,54 @@
     \ifthenelse{\value{page}=\pageref{otherpagestyle}}
       {MYFANCY SECTION}
       {\textsl{\rightmark}}}
-% The rest is inherited from fancy
+% The rest is inherited from pagestyle fancy
 }
+
+\newcommand{\strutheader}{%
+  \texttt{\textbackslash strut}:
+  \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+  \rule{10pt}{0.7\normalbaselineskip}
+  \texttt{\textbackslash headruleskip}$\searrow$
+  \raisebox{-0.3\normalbaselineskip}[0pt][0pt]%
+    {\ifdim \headruleskip>0pt
+      \rule[-\headruleskip]{10pt}{\headruleskip}
+      \else
+      \rule{10pt}{-\headruleskip}
+     \fi}
+}
+\newcommand{\strutfooter}{%
+  \raisebox{0pt}[0pt][0pt]{%
+    \texttt{\textbackslash strut}:
+    \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+    \rule{10pt}{0.7\normalbaselineskip}
+    \texttt{\textbackslash footruleskip} $\nearrow$
+    \rule[0.7\normalbaselineskip]{10pt}{\footruleskip}}%
+}
+
+\fancypagestyle{showstruts}{%
+  \fancyhead[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutheader}%
+      {\rightmark}%
+  }
+  \fancyfoot[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutfooter}%
+      {}%
+  }
+  \fancyheadinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\headruleskip}{4pt}}%
+      {\renewcommand{\headruleskip}{0pt}}%
+  }
+  \fancyfootinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\footrulewidth}{0.4pt}}%
+      {\renewcommand{\footrulewidth}{0pt}}%
+  }
+}
+
+\newcommand{\cs}[1]{\texttt{\char`\\#1}}
 
 \begin{document}
 \tableofcontents
@@ -31,8 +77,12 @@
 \begin{boxedminipage}{\textwidth}
 This is example 25 in the fancyhdr documentation.
 
-It demonstrates \verb|\thispagestyle|, both a good and a bad example.
-It also gives a better solution to change the page style in the middle of a text.
+In chapter~\ref{ch:just-thispagestyle} it demonstrates \cs{thispagestyle}, both a good and a bad example.
+
+In chapter~\ref{ch:pageref} it gives a better solution to change the page style in the middle of a text. This is example 25~(a) in the \textsf{fancyhdr} documentation.
+
+Finally, chapter~\ref{ch:showstruts} gives the code for the ``\emph{showstruts}'' example 25~(b) in the documentation.
+
 The normal page style in this document is:
 \begin{verbatim}
 \pagestyle{fancy}
@@ -49,46 +99,36 @@ We use the following additional page style \texttt{myfancy}. It just puts ``MYFA
 % The rest is inherited from fancy
 }
 \end{verbatim}
-And for selecting a different page style, for the page where a specific text appears we put a label \texttt{otherpagestyle} in the text and then use a definition in the header that chosses either the normal value or the special value depending on the page number:
-\begin{verbatim}
-\fancypagestyle{switch}{
-  \fancyhead[LE,RO]{%
-    \ifthenelse{\value{page}=\pageref{otherpagestyle}}
-      {MYFANCY SECTION}
-      {\textsl{\rightmark}}}
-% The rest is inherited from fancy
-}
-\end{verbatim}
 
 \end{boxedminipage}
 
-\chapter{Introduction}
+\chapter{Just \cs{thispagestyle}}
+\label{ch:just-thispagestyle}
+
 \thispagestyle{myfancy}
 
+\begin{boxedminipage}{\textwidth}
 Here we start with a \verb|\thispagestyle{myfancy}|. The header on this page comes out as\\
-on the left: \textsl{Introduction} (the normal header)\\
+on the left: \textsl{Just \cs{thispagestyle}} (=the normal header)\\
 on the right: MYFANCY SECTION
 
 The next page will have a more traditional header with chapter and section titles.
 
+The  \verb|\thispagestyle{myfancy}| works here, because it is given right at the beginning of the chapter where we are sure that a page break will not occur.
+\end{boxedminipage}
+
 \bigskip
 
-\lipsum[1]
-
-\section{The Problem}
-\label{sec:problem}
-
-\lipsum[2-3]
-
-\section{Evaluation}
-
+\lipsum[1-3]
 \lipsum[3-5]
 
 \newpage
 
-\section{Thispagestyle attempt}
+\section{A wrong \cs{thispagestyle} attempt}
 
-In this section we will put a \verb|\thispagestyle{myfancy}| in the middle of the text. But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it encounters the \verb|\thispagestyle{myfancy}| command. That means \textbf{this page should have got the myfancy header}. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. \textbf{Now the different header is no longer at the page where it says it should be.}
+\begin{boxedminipage}{\textwidth}
+In this section we will put a \verb|\thispagestyle{myfancy}| in the middle of the text. But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it encounters the \verb|\thispagestyle{myfancy}| command. That means \textbf{the MYFANCY SECTION header comes at the current page}. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. \textbf{Now the different header is no longer at the page where that text is.}
+\end{boxedminipage}
 
 \bigskip
 
@@ -99,12 +139,13 @@ Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet 
 
 \bigskip
 
-Donec odio elit, dictum in, hendrerit sit amet, egestas sed, leo.
-
-\textbf{This page should have a different header than the surrounding pages. 
+\noindent
+\begin{boxedminipage}{\textwidth}
+\textbf{This page was supposed have a MYFANCY SECTION header. 
 \thispagestyle{myfancy}
-It is done with the} \verb|\thispagestyle{myfancy}| \textbf{command.
-However, it appears that the different header comes on the previous page.}
+It is done with the} \verb|\thispagestyle{myfancy}| \textbf{command right at this place.
+However, it appears that the MYFANCY SECTION header comes on the previous page.}
+\end{boxedminipage}
 
 \bigskip
 
@@ -112,11 +153,29 @@ However, it appears that the different header comes on the previous page.}
 
 \newpage
 
-\section{A better solution}
+\chapter{A better solution}
+\label{ch:pageref}
+\pagestyle{switch}
 
-In this section we a better solution to the \verb|\thispagestyle{myfancy}| in the middle of the text. We set a label in the text that we want the different page style. Then we will use a test in our page style, and use different values depending on the page number. If the page number is equal to the page number of the label we use  \verb|\pagestyle{myfancy}|, otherwise the default  \verb|\pagestyle{fancy}|.
+\begin{boxedminipage}{\textwidth}
+This is example 25~(a).
 
-But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it encounters the \verb|\thispagestyle{myfancy}| command. That means \texttt{this page will get the myfancy header}. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. Now the different header is no longer at the page where it says it should be.
+In this chapter we use a better solution to the \verb|\thispagestyle{myfancy}| in the middle of the text.
+
+For selecting a different page style for the page where a specific text appears we put a label \texttt{otherpagestyle} in the text and then use a definition in the header that chooses
+
+ If the page number is equal to the page number of the label we use the same as \verb|\pagestyle{myfancy}|, otherwise the default values of \verb|\pagestyle{fancy}|.
+
+\begin{verbatim}
+\fancypagestyle{switch}{
+  \fancyhead[LE,RO]{%
+    \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+      {MYFANCY SECTION}
+      {\textsl{\rightmark}}}
+% The rest is inherited from fancy
+}
+\end{verbatim}
+\end{boxedminipage}
 
 \bigskip
 
@@ -125,8 +184,10 @@ But it appears that this text is close to the end of the page. So in this case \
 \bigskip
 Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fer- mentum eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. 
 
-\pagestyle{switch}
+\section{Here it comes}
+
 \noindent
+\begin{boxedminipage}{\textwidth}
 \begin{minipage}{\linewidth}
   \textbf{This page should have a different header than the surrounding
     pages. The header should contain \textnormal{``MYFANCY SECTION''}.
@@ -135,16 +196,93 @@ Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet 
     has tests in the header field definitions. This chooses the actual
     header depending on the page number.}
 \end{minipage}
+\end{boxedminipage}
 \bigskip
 
-\lipsum[8-9]
+\lipsum[8-10]
 
-\newpage
+\medskip
 
-\textbf{This page should get the normal header again because the page number is different than the page number in the label.}
- 
-\bigskip
+\noindent
+\begin{boxedminipage}{\textwidth}
+\textbf{This page should get the normal header again because the page number is different from the page number in the label.}
+\end{boxedminipage}
 
-\lipsum[10]
+\chapter{Showstruts}
+\label{ch:showstruts}
+\pagestyle{showstruts}
+
+\begin{boxedminipage}{\textwidth}
+This is example 25~(b) from the \textsf{fancyhdr} documentation. It uses the same principle as the previous chapter to get a different header on one particular page.
+Only the page style is now \texttt{showstruts} and also the label is called \texttt{showstruts}.
+We start the \verb|\pagestyle{showstruts}| right here at the beginning of the chapter.
+
+Here is the code:
+
+\begin{verbatim}
+\newcommand{\strutheader}{%
+  \texttt{\textbackslash strut}:
+  \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+  \rule{10pt}{0.7\normalbaselineskip}
+  \texttt{\textbackslash headruleskip}$\searrow$
+  \raisebox{-0.3\normalbaselineskip}[0pt][0pt]%
+    {\ifdim \headruleskip>0pt
+      \rule[-\headruleskip]{10pt}{\headruleskip}
+      \else
+      \rule{10pt}{-\headruleskip}
+     \fi}
+}
+\newcommand{\strutfooter}{%
+  \raisebox{0pt}[0pt][0pt]{%
+    \texttt{\textbackslash strut}:
+    \rule[-0.3\normalbaselineskip]{10pt}{0.3\normalbaselineskip}%
+    \rule{10pt}{0.7\normalbaselineskip}
+    \texttt{\textbackslash footruleskip} $\nearrow$
+    \rule[0.7\normalbaselineskip]{10pt}{\footruleskip}}%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\fancypagestyle{showstruts}{%
+  \fancyhead[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutheader}%
+      {\rightmark}%
+  }
+  \fancyfoot[L]{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\strutfooter}%
+      {}%
+  }
+  \fancyheadinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\headruleskip}{4pt}}%
+      {\renewcommand{\headruleskip}{0pt}}%
+  }
+  \fancyfootinit{%
+    \ifthenelse{\value{page}=\pageref{showstruts}}%
+      {\renewcommand{\footrulewidth}{0.4pt}}%
+      {\renewcommand{\footrulewidth}{0pt}}%
+  }
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\section{Here we go}
+
+\lipsum[1-3]
+
+\medskip
+\noindent
+\begin{boxedminipage}{\textwidth}
+\textbf{Here we put the label \texttt{showstruts}, so the struts in the header and footer should appear on this page.}
+\label{showstruts}
+\end{boxedminipage}
+\medskip
+
+\lipsum[3-5]
 
 \end{document}
