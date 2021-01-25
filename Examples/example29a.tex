@@ -15,6 +15,7 @@
 \fancyhead[L]{Example 29a}
 \fancyhead[R]{\rightmark}
 \fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
   \par\noindent\rule{\textwidth}{1mm}\\*
@@ -42,7 +43,7 @@ a ``Continued\ldots'' header/footer.
 
 It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper header and footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
 
-However, in this example, the text ``Continued from previous page\ldots'' is not put in the page header, but on the top of the page body. The page header is used for normal headers. This is done by using an \verb|\afterpage| to place it there. The text that \verb|\afterpage| has to put there is put in the mark (\verb|\firstxmark|). To make it a bit more dramatic, we also highlight the that text.
+However, in this example, the text ``Continued from previous page\ldots'' is not put in the page header, but on the top of the page body. The page header is used for normal headers. This is done by using an \verb|\afterpage| to place it there. The text that \verb|\afterpage| has to put there is put in the mark (\verb|\firstxmark|). To make it a bit more dramatic, we also highlight that text.
 
 \begin{verbatim}
 \newcommand{\LM}{\noindent
@@ -53,6 +54,8 @@ However, in this example, the text ``Continued from previous page\ldots'' is not
 \fancyhead[L]{Example 29a}
 \fancyhead[R]{\rightmark}
 \fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{
+  \fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
   \par\noindent\rule{\textwidth}{1mm}\\*
