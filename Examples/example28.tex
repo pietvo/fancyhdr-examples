@@ -45,6 +45,8 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
     \put(-2,-3){\makebox(0,0)[r]{\firstxmark}}
   \end{picture}\rightmark} % \rightmark = section title
 \fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{
+  \fancyhead{}\renewcommand{\headrule}{}}
  . . . .
 \newenvironment{continued}{%
   \par\noindent\rule{\textwidth}{1mm}\\*
