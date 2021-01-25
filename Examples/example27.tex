@@ -37,6 +37,8 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
 \begin{verbatim}
 \fancyhead[L]{\firstleftxmark} % = \firstxmark
 \fancyfoot[R]{\lastrightxmark} % = \lastxmark
+\fancypagestyle{plain}{
+  \fancyhead{}\renewcommand{\headrule}{}}
  . . . .
 \newenvironment{continued}{%
   \par\noindent\rule{\textwidth}{1mm}\\*
