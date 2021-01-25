@@ -1,0 +1,130 @@
+\documentclass{report}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=16.5cm, paperheight=21cm, left=4cm, right=2cm]{geometry}
+\usepackage{extramarks}
+\usepackage{xcoffins}
+\NewCoffin\LeftMark
+\NewCoffin\RefPoint
+
+%\DisplayCoffinHandles\RefPoint{blue}
+%\DisplayCoffinHandles\LeftMark{red}
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{\SetHorizontalCoffin\LeftMark{\firstxmark}%
+  \SetVerticalCoffin\RefPoint{0pt}{}%
+  \JoinCoffins*\RefPoint[l,b]\LeftMark[r,t](-10pt,-32.5pt)%
+  \TypesetCoffin\RefPoint[r,b](0pt,00pt)\rightmark}
+\fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1mm}\\*
+  \extramarks{}{}%
+  \extramarks{Continued\ldots}{Continued on next page\ldots}%
+}{
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{Continued\ldots}{}%
+   \extramarks{}{}\par
+ }
+
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+
+\thispagestyle{plain}
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 28b ****NOT**** in the fancyhdr documentation.
+
+It demonstrates the use of the \texttt{extramarks} package to implement
+a ``Continued\ldots'' header/footer.
+
+However, in this example the ``Continued\ldots'' header is put in the margin, and the left header contains the section title. The width of the document is increased to make the margin wider. These are the only differences with Example 27.
+
+This example is a variant of Example 28, in that instead of a \texttt{picture} environment, we use the \texttt{xcoffin} package. This is an interesting exercise, but I think the \texttt{picture} environment is easier.
+
+It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper header and footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
+
+\begin{verbatim}
+\fancyhead[L]{\setlength{\unitlength}{\baselineskip}%
+  \begin{picture}(0,0)
+    \put(-2,-3){\makebox(0,0)[r]{\firstxmark}}
+  \end{picture}\rightmark} % \rightmark = section title
+\fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{
+  \fancyhead{}\renewcommand{\headrule}{}}
+ . . . .
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1mm}\\*
+  \extramarks{}{}%
+  \extramarks{Continued\ldots}%
+             {Continued on next page\ldots}%
+}{
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{Continued\ldots}{}%
+   \extramarks{}{}\par
+ }
+\end{verbatim}
+
+\end{boxedminipage}
+
+\pagestyle{fancy}
+
+\newpage
+\pagenumbering{arabic}
+\chapter{Introduction}
+
+\lipsum[1-4]
+
+\section{The Problem}
+\label{sec:problem}
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer.}
+
+  \textit{This block crosses one page boundary.}
+
+  \lipsum[2] %\lipsum
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\section{Evaluation}
+
+\lipsum[3]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer.}
+
+  \textit{This block crosses several page boundaries.}
+
+  \lipsum[2-7]
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\chapter{Another chapter}
+
+\label{cha:another-chapter}
+
+\lipsum[2]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer if it crosses a page boundary.}
+
+  \textit{This block stays within a page. Therefore no header/footer.}
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\section{Another section}
+
+\lipsum[3-4]
+
+\end{document}
