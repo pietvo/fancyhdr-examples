@@ -1,0 +1,133 @@
+\documentclass{report}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[a5paper]{geometry}
+\usepackage{extramarks}
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\newcommand{\mysaved}{}
+
+\fancyhead[L]{Example 29c}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\lastxmark}
+\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
+  {\gdef\mysaved{}}
+  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued from previous page]}}}}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1pt}\\*
+  \extramarks{}{}%
+  \extramarks{(Continued)}{Continued on next page\ldots}%
+}{
+   \noindent\rule{\textwidth}{1pt}%
+   \extramarks{(Continued)}{}%
+   \extramarks{}{}%
+   \mysaved\par
+ }
+
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+
+\thispagestyle{plain}
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 29c in the fancyhdr documentation.
+
+It demonstrates the use of the \texttt{extramarks} package to implement
+a ``Continued\ldots'' footer.
+
+It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
+
+However, in this example, the text ``Continued from previous page'' is not put in the page header, but after the block. The page header is used for normal headers. This is done by storing this text in a \emph{variable} (macro). The value is saved while the page header is formed, and uses the footer field to check if the saved value must be empty or the text ``Continued from previous page''.
+
+\begin{verbatim}
+\newcommand{\mysaved}{}
+
+\fancyhead[L]{Example 29c}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\lastxmark}
+\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
+  {\gdef\mysaved{}}
+  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued
+                 from previous page]}}}}
+\fancypagestyle{plain}{%
+  \fancyhead{}\renewcommand{\headrule}{}}
+
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1pt}\\*
+  \extramarks{}{}%
+  \extramarks{Continued}{Continued on next page\ldots}%
+}{
+   \noindent\rule{\textwidth}{1pt}%
+   \extramarks{Continued}{}%
+   \extramarks{}{}%
+   \mysaved\par
+ }
+\end{verbatim}
+
+\end{boxedminipage}
+
+\pagestyle{fancy}
+
+\newpage
+\pagenumbering{arabic}
+\chapter{Introduction}
+
+\lipsum[1-4]
+
+\section{The Problem}
+\label{sec:problem}
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in page footer and after the block.}
+
+  \textit{This block crosses one page boundary.}
+
+  \lipsum[2]
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\section{Evaluation}
+
+\lipsum[3-6]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in page footer and after the block.}
+
+  \textit{This block crosses several page boundaries.}
+
+  \lipsum[2-7]
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+Some closing text following the block.
+
+\chapter{Another chapter}
+
+\label{cha:another-chapter}
+
+\lipsum[2]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in page footer and after the block.}
+
+  \textit{This block stays within a page. Therefore no header/footer.}
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+Some more text after the block.
+
+\section{Another section}
+
+\lipsum[3-4]
+
+\end{document}
