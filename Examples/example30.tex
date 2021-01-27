@@ -1,0 +1,76 @@
+\documentclass{report}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[a5paper]{geometry}
+
+\usepackage{graphicx}
+\graphicspath{{Images}}
+
+\usepackage{fancyhdr}
+
+\fancyhead[L]{Example 30}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\setlength{\unitlength}{1mm}
+  \begin{picture}(0,0)
+    \put(5,-20){\includegraphics[width=1cm]{pic\thepage}}
+  \end{picture}}
+
+\begin{document}
+
+\pagenumbering{roman}
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 30 in the fancyhdr documentation.
+
+It shows a movie in the righthand footer in all pages after this one. Just flip very fast through the pages to see it.
+
+\begin{verbatim}
+\fancyhead[L]{Example 30}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\setlength{\unitlength}{1mm}
+  \begin{picture}(0,0)
+    \put(5,-20){%
+      \includegraphics[width=1cm]{pic\thepage}}
+  \end{picture}}
+...
+\fancypagestyle{plain}{%
+  \fancyhead{}\renewcommand{\headrule}{}}
+\end{verbatim}
+
+\end{boxedminipage}
+
+\newpage
+
+\pagestyle{fancy}
+\fancypagestyle{plain}{%
+  \fancyhead{}\renewcommand{\headrule}{}}
+\pagenumbering{arabic}
+\chapter{Introduction}
+
+\lipsum[1-4]
+
+\section{The Problem}
+\label{sec:problem}
+
+  \lipsum
+
+\section{Evaluation}
+
+\lipsum[3-6]
+
+\chapter{Another chapter}
+
+\label{cha:another-chapter}
+
+\lipsum
+
+\section{Another section}
+
+\lipsum[3-4]
+
+\end{document}
