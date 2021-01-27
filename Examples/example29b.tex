@@ -1,0 +1,172 @@
+\documentclass{report}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[a5paper]{geometry}
+\usepackage{extramarks}
+\usepackage{afterpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\newcommand*{\LM}{\noindent
+  Continued from previous page\ldots\\[1ex]}
+\newcommand*{\DEBUG}[1]{#1} % For debugging
+%\newcommand*{\DEBUG}[1]{} % To disable debugging
+\newcommand*{\APcommand}{}
+\newcommand*{\setAPcommand}{%
+  \gdef\APcommand{\firstxmark\setAP}}
+\newcommand*{\clearAPcommand}{%
+  \DEBUG{CLEAR}\gdef\APcommand{}}
+\newcommand*{\setAP}{\afterpage{%
+  \DEBUG{AFTERPAGE:}\APcommand}}
+\newcommand*{\startAP}{%
+  \ifx\APcommand\empty\setAPcommand\setAP\fi}
+
+\fancyhead[L]{Example 29b}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{%
+  \fancyhead{}\renewcommand{\headrule}{}}
+
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1mm}\\*
+  \extramarks{}{}%
+  \extramarks{\LM}{Continued on next page\ldots}%
+  \startAP
+}{
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{\LM}{}%
+   \extramarks{}{\noexpand\clearAPcommand}\par
+ }
+
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+
+\thispagestyle{plain}
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 29b in the fancyhdr documentation.
+
+It demonstrates the use of the \texttt{extramarks} package to implement
+a ``Continued\ldots'' header/footer.
+
+It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper header and footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
+
+However, in this example, the text ``Continued from previous page\ldots'' is not put in the page header, but on the top of the page body. The page header is used for normal headers. This is done by using an \verb|\afterpage| to place it there. The text that \verb|\afterpage| has to put there is put in the mark (\verb|\firstxmark|). To make it a bit more dramatic, we also highlight that text.
+
+This example differs from Example 29a, in that we stop the sequence of \verb|\afterpage| commands as soon as possible, and restart it when it is needed again.
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+For debugging purposes we add some extra text ``AFTERPAGE:'' to the \verb|\afterpage|, so that we can see the difference between an empty \texttt{afterpage} (pages 4, 7, 10) and no \texttt{afterpage} (pages 2, 8, 11, 12). Also we put ``CLEAR'' in those footers where \verb|\clearAPcommand| is called.
+
+\begin{verbatim}
+\newcommand*{\LM}{\noindent
+  Continued from previous page\ldots\\[1ex]}
+\newcommand*{\DEBUG}[1]{#1} % For debugging
+%\newcommand*{\DEBUG}[1]{} % To disable debugging
+\newcommand*{\APcommand}{}
+\newcommand*{\setAPcommand}{%
+  \gdef\APcommand{\firstxmark\setAP}}
+\newcommand*{\clearAPcommand}{%
+  \DEBUG{CLEAR}\gdef\APcommand{}}
+\newcommand*{\setAP}{\afterpage{%
+  \DEBUG{AFTERPAGE:}\APcommand}}
+\newcommand*{\startAP}{%
+  \ifx\APcommand\empty\setAPcommand\setAP\fi}
+
+\fancyhead[L]{Example 29b}
+\fancyhead[R]{\rightmark}
+\fancyfoot[R]{\lastxmark}
+\fancypagestyle{plain}{%
+  \fancyhead{}\renewcommand{\headrule}{}}
+
+\newenvironment{continued}{%
+  \par\noindent\rule{\textwidth}{1mm}\\*
+  \extramarks{}{}%
+  \extramarks{\LM}{Continued on next page\ldots}%
+  \startAP
+}{
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{\LM}{}%
+   \extramarks{}{\noexpand\clearAPcommand}\par
+ }
+\end{verbatim}
+
+\end{boxedminipage}
+
+\pagestyle{fancy}
+
+\newpage
+\pagenumbering{arabic}
+\chapter{Introduction}
+
+\lipsum[1-4]
+
+\section{The Problem}
+\label{sec:problem}
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer.}
+
+  \textit{This block crosses one page boundary.}
+
+  \lipsum[2]
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\section{Evaluation}
+
+\lipsum[3-6]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer if it crosses a page boundary.}
+
+  \textit{This block stays within a page. Therefore no header/footer.}
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+A second one.
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer.}
+
+  \textit{This block crosses several page boundaries.}
+
+  \lipsum[2-7]
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\lipsum
+
+\chapter{Another chapter}
+
+\label{cha:another-chapter}
+
+\lipsum[2]
+
+\begin{continued}
+  \textbf{We want to indicate that this block of text belongs together, with
+    `Continued' in header and footer if it crosses a page boundary.}
+
+  \textit{This block stays within a page. Therefore no header/footer.}
+
+  \textbf{Here ends the  block of text that belongs together.}\\
+\end{continued}
+
+\section{Another section}
+
+\lipsum
+
+\end{document}
