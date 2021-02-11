@@ -1,0 +1,237 @@
+\documentclass[twoside]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage[a5paper]{geometry}
+
+\usepackage{fancyhdr}
+
+% Definitions of blobs for overview and pages.
+
+\setlength{\unitlength}{18mm}
+\newcommand{\blob}{\rule[-.2\unitlength]{2\unitlength}{.5\unitlength}}
+
+\newcommand\rblob{\thepage
+  \begin{picture}(0,0)
+    \put(1,-\value{chapter}){\blob}
+  \end{picture}}
+
+\newcommand\lblob{%
+  \begin{picture}(0,0)
+    \put(-3,-\value{chapter}){\blob}
+  \end{picture}%
+  \thepage}
+
+\pagestyle{fancy}
+\fancyfoot{}
+
+\newcounter{line}
+\newcommand{\chapname}[1]{\addtocounter{line}{1}%
+  \put(1,-\value{line}){\blob}
+  % Adjust these numbers so the text gets the proper indentation
+  \put(-5.5,-\value{line}){\Large \arabic{line}}
+  \put(-5,-\value{line}){\Large #1}}
+
+\newcommand{\overview}{%
+  \begin{picture}(0,0)
+    \chapname{Introduction}
+    \chapname{Another chapter}
+    \chapname{Third case}
+    \chapname{Fourth case}
+    \chapname{Fifth case}
+    \chapname{Sixth case}
+    \chapname{Seventh case}
+  \end{picture}}
+
+\begin{document}
+
+% A normal book would have a title page, and other front matter first.
+
+% Then the overview page
+% The page doesn't have 'contents'; all the visual contents is generated
+% by the \overview command in the header
+
+\fancyhead[L]{Overview}
+\fancyhead[R]{\overview}
+\mbox{}\newpage % This produces the overview page
+
+% Front matter -- doesn't have blobs.
+
+\fancyhead[RE]{\rightmark}
+\fancyhead[RO,LE]{}
+\fancyhead[LO]{\leftmark}
+
+\pagenumbering{roman}
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 31 in the \texttt{fancyhdr} documentation.
+
+It shows how to generate a `thumb index'.
+
+\begin{verbatim}
+\setlength{\unitlength}{18mm}
+\newcommand{\blob}{%
+  \rule[-.2\unitlength]{2\unitlength}{.5\unitlength}}
+
+\newcommand\rblob{\thepage
+  \begin{picture}(0,0)
+    \put(1,-\value{chapter}){\blob}
+  \end{picture}}
+
+\newcommand\lblob{%
+  \begin{picture}(0,0)
+    \put(-3,-\value{chapter}){\blob}
+  \end{picture}%
+  \thepage}
+
+\pagestyle{fancy}
+\fancyfoot{}
+
+\newcounter{line}
+\newcommand{\chapname}[1]{\addtocounter{line}{1}%
+  \put(1,-\value{line}){\blob}
+  % Adjust these numbers for the proper indentation
+  \put(-5.5,-\value{line}){\Large \arabic{line}}
+  \put(-5,-\value{line}){\Large #1}}
+
+\newcommand{\overview}{%
+  \begin{picture}(0,0)
+    \chapname{Introduction}
+    \chapname{Another chapter}
+    \chapname{Third case}
+    \chapname{Fourth case}
+    \chapname{Fifth case}
+    \chapname{Sixth case}
+    \chapname{Seventh case}
+  \end{picture}}
+\end{verbatim}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+The overview page:\\
+The page doesn't have 'contents' --
+all the visual contents is generated
+by the \verb|\overview| command in the header
+
+\begin{verbatim}
+\fancyhead[L]{Overview}
+\fancyhead[R]{\overview}
+\mbox{}\newpage % This produces the overview page
+
+% Front matter -- doesn't have blobs.
+
+\fancyhead[RE]{\rightmark}
+\fancyhead[RO,LE]{}
+\fancyhead[LO]{\leftmark}
+
+\pagenumbering{roman}
+\thispagestyle{plain}
+\tableofcontents
+ . . .
+\newpage
+
+\pagenumbering{arabic}
+
+\fancyhead[RO]{\rblob}
+\fancyhead[LE]{\lblob}
+
+% Page style 'plain' does not have the usual header,
+% but it does have the blobs.
+
+\fancypagestyle{plain}{%
+  \fancyhead[RE,LO]{}
+  \renewcommand{\headrule}{}%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+
+% Here the document begins
+
+\pagenumbering{arabic}
+
+% Now activate the blobs
+
+\fancyhead[RO]{\rblob}
+\fancyhead[LE]{\lblob}
+
+% Page style 'plain' does not have the usual header,
+% but it does have the blobs.
+
+\fancypagestyle{plain}{%
+  \fancyhead[RE,LO]{}
+  \renewcommand{\headrule}{}%
+}
+
+% Here the document begins
+
+\chapter{Introduction}
+
+\lipsum[1-4]
+
+\section{The Problem}
+\label{sec:problem}
+
+  \lipsum
+
+\section{Evaluation}
+
+\lipsum[3-6]
+
+\chapter{Another chapter}
+
+\label{cha:another-chapter}
+
+\lipsum
+
+\section{Another section}
+
+\lipsum[3-4]
+
+\chapter{Third case}
+
+\lipsum[1-2]
+
+\section{Third section}
+
+\lipsum
+
+\chapter{Fourth case}
+
+\lipsum[1-2]
+
+\section{Fourth section}
+
+\lipsum
+
+\chapter{Fifth case}
+
+\lipsum[1-2]
+
+\section{fifth section}
+
+\lipsum
+
+\chapter{Sixth case}
+
+\lipsum[1-2]
+
+\section{Sixth section}
+
+\lipsum
+
+\chapter{Seventh case}
+
+\lipsum[1-2]
+
+\section{Seventh section}
+
+\lipsum
+
+\end{document}
