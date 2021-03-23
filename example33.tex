@@ -1,0 +1,265 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{afterpage}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{subcaption}
+
+\newcommand{\cs}[1]{\texttt{\char`\\#1}}
+\renewcommand{\thesection}{\Alph{section}}
+
+\begin{document}
+\tableofcontents
+\medskip
+\listoffigures
+\medskip
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+\newcommand{\fakecaption}[2]{% #1 = figure label #2 = caption
+  \par Figure~\ref{#1}: #2
+}
+\newcommand{\myfigures}[3]{% #1 = position #2 = label #3 = caption
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-a}
+  \caption[#3] % For the list of figures
+          {#3 (a)}
+  \label{#2}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-b}
+  \fakecaption{#2}{#3 (b)}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-c}
+  \fakecaption{#2}{#3 (c)}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image}
+  \fakecaption{#2}{#3 (d)}
+\end{figure}
+}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 33 in the \texttt{fancyhdr} documentation.
+
+It shows some ways to split a figure over two or more pages. We do this by putting the pieces in separate \texttt{figure} environments. The first part has a real caption, which will appear in the list of figures. The other parts have fake captions.
+
+This example is just about figure placement; it has no \texttt{fancyhdr} code.
+
+We put the figures in a macro \texttt{myfigures} and then include it in various ways.
+
+\begin{verbatim}
+\newcommand{\fakecaption}[2]{% #1 = figure label #2 = caption
+  \par Figure~\ref{#1}: #2
+}
+\newcommand{\myfigures}[3]{% #1 = position #2 = label #3 = caption
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-a}
+  \caption[#3] % For the list of figures
+          {#3 (a)}
+  \label{#2}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-b}
+  \fakecaption{#2}{#3 (b)}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image-c}
+  \fakecaption{#2}{#3 (c)}
+\end{figure}
+\begin{figure}[#1]
+  \centering
+  \includegraphics[scale=0.5]{example-image}
+  \fakecaption{#2}{#3 (d)}
+\end{figure}
+}
+\end{verbatim}
+\end{boxedminipage}
+
+% A
+\section{Split into separate \texttt{figure} environments}
+
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+
+\myfigures{!htbp}{fig:first}{This is a multipart figure}
+
+\end{verbatim}
+\end{boxedminipage}
+
+\medskip
+
+\myfigures{!htbp}{fig:first}{This is a multipart figure}
+
+\lipsum[1-2]
+
+% B
+\section{Use \cs{afterpage} with \cs{clearpage}}
+
+\begin{boxedminipage}{\textwidth}
+The \cs{clearpage} will make sure that other floats  are output first, and therefore cannot intrude between our figures.
+We put it in \cs{afterpage}, otherwise we might have a half-filled page.
+But if there is enough space left on a page, some of the text will go between the figures.
+
+\begin{verbatim}
+\afterpage{\clearpage
+           \myfigures{!htbp}{fig:second}{Another multi-figure}}
+
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\afterpage{\clearpage
+           \myfigures{!htbp}{fig:second}{Another multi-figure}}
+
+\lipsum[1]
+
+% C
+\section{Use  \cs{afterpage} and \cs{clearpage} with  \cs{begin}\texttt{\{figure\}[p]}\ldots}
+
+\afterpage{\clearpage
+           \myfigures{!p}{fig:third}{Yet one figure more}}
+
+\medskip
+
+\begin{boxedminipage}{\textwidth}
+Here we have used
+\begin{verbatim}
+
+\afterpage{\clearpage
+           \myfigures{!p}{fig:third}{Yet one figure more}}
+
+\end{verbatim}
+However, this may have an undesired effect.
+If there is still some figure part of the previous sequence that has not yet found a place, it will be forced out because of the \cs{clearpage} and the a new page will start, with the previous page not optimally filled, as can be seen above.
+\end{boxedminipage}
+
+\medskip 
+
+\lipsum[1-2]
+
+% D
+\section{Use  just  \cs{begin}\texttt{\{figure\}[p]}\ldots}
+
+\begin{boxedminipage}{\textwidth}
+Here we have used
+\begin{verbatim}
+
+\myfigures{!p}{fig:fourth}{The last figure}
+
+\end{verbatim}
+This works to keep the figures on their own pages, without intervening
+text, but now they are pushed far away towards the back of the document. This
+is because float pages need to be reasonably full before they are
+generated.
+\end{boxedminipage}
+
+
+\myfigures{!p}{fig:fourth}{The last figure}
+
+\clearpage
+
+% E
+\section{Using the \texttt{subcaption} package}
+\label{sec:suncaption}
+
+The defects of the above approach are
+\begin{enumerate}
+\item It is clumsy to make the captions of all but the first part of the figure
+\item It is hard to refer to the parts separately
+\end{enumerate}
+For this the \texttt{subcaption} package comes to the rescue. First it has a \cs{ContinuedFloat} command to indicate that a figure is a continuation of a previous one, and therefore will not get a new number, neither a separate entry in the list of figures if you wish.
+
+Second, it has a \cs{subcaptionbox} command and a \texttt{subfigure} environment for the parts, where a subcaption can be given, that can also have a \cs{label} to refer to in the document. The \cs{subcaptionbox} is a specialized \cs{parbox} but its \emph{width} parameter is optional. The \texttt{subfigure} environment is a specialized \texttt{minipage}, so it has the same parameters.
+
+These should be used in a \texttt{figure} environment, so all the placement methods of the previous section should still apply.
+
+The \texttt{subfigure} environment has a \cs{subcaption} command for the subcaption; the \cs{subcaptionbox} has the subcaption (with its \cs{label} if desired) as its first argument. When more than one \cs{subcaptionbox} is horizontally next to each other, the subcaptions will be aligned.
+
+In the following example we use a \cs{subcaptionbox} for the first two parts, which are together in a single \texttt{figure} environment. We use a \texttt{subfigure} environments for the other two, each one in its own \texttt{figure} environment. These use a \cs{caption}\texttt{[]\{\ldots\}}. The empty optional argument \texttt{[]} causes the caption not to appear in the list of figures.
+
+This is the code:
+
+\begin{verbatim}
+\begin{figure}[!htbp]
+  \centering
+    \subcaptionbox{a subfigure in a \cs{subcaptionbox}}
+      {\includegraphics[scale=0.3]{example-image-a}}
+  \quad
+    \subcaptionbox{another subfigure, also in a \cs{subcaptionbox}}
+      {\includegraphics[scale=0.4]{example-image-b}}
+  \caption{A figure with subfigures}
+  \label{fig:subfigures}
+\end{figure}
+
+\begin{figure}[!htbp]\ContinuedFloat
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{example-image-c}
+    \subcaption{subfigure}
+  \end{subfigure}
+  \caption[]{A figure with subfigures}
+\end{figure}
+
+\begin{figure}[!htbp]\ContinuedFloat
+  \begin{subfigure}{\textwidth}
+    \centering 
+    \includegraphics[scale=0.5]{example-image}
+    \subcaption{last subfigure}
+    \label{subfig:last}
+  \end{subfigure}
+  \caption[]{A fake caption just for demo}
+\end{figure}
+\end{verbatim}
+
+\begin{figure}[!htbp]
+  \centering
+    \subcaptionbox{a subfigure in a \cs{subcaptionbox}}
+      {\includegraphics[scale=0.3]{example-image-a}}
+  \quad
+    \subcaptionbox{another subfigure, also in a \cs{subcaptionbox}}
+      {\includegraphics[scale=0.4]{example-image-b}}
+  \caption{A figure with subfigures}
+  \label{fig:subfigures}
+\end{figure}
+
+\begin{figure}[!htbp]\ContinuedFloat
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{example-image-c}
+    \subcaption{subfigure}
+  \end{subfigure}
+  \caption[]{A figure with subfigures}
+\end{figure}
+
+\begin{figure}[!htbp]\ContinuedFloat
+  \begin{subfigure}{\textwidth}
+    \centering 
+    \includegraphics[scale=0.5]{example-image}
+    \subcaption{last subfigure}
+    \label{subfig:last}
+  \end{subfigure}
+  \caption[]{A fake caption just for demo}
+\end{figure}
+
+Here we show how to use the labels of both figure and subfigure.
+\begin{verbatim}
+The reference~\ref{subfig:last} refers to the last subfigure
+of figure~\ref{fig:subfigures} on page~\pageref{subfig:last}.
+\end{verbatim}
+
+The reference~\ref{subfig:last} refers to the last subfigure
+of figure~\ref{fig:subfigures} on page~\pageref{subfig:last}.
+
+\end{document}

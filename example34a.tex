@@ -1,0 +1,56 @@
+\documentclass[oneside]{book}
+\usepackage{kantlipsum}
+\usepackage{boxedminipage}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}} % Section title
+\fancyhead[LO,RE]{\nouppercase{\leftmark}} % Chapter title
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 34a in the \texttt{fancyhdr} documentation.
+
+This document has some very long chapter and section titles. These are too long to fit in the header, and therefore they overlap, which is undesirable.
+
+This example shows one way to solve this.
+It uses the optional argument of \verb|\chapter| and \verb|\section| to supply shorter titles. However, the short titles will also appear in the table of contents, as you can see above.
+
+\begin{verbatim}
+\chapter[This is a not so long chapter title]
+        {This is a very long chapter title to see if we can give
+         fancyhdr a shorter one that fits in the header}
+\section[Short section title]
+        {This is a very long section title that will not fit in
+         the header}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+\chapter[This is a not so long chapter title]
+        {This is a very long chapter title to see if we can give
+         fancyhdr a shorter one that fits in the header}
+\thispagestyle{fancy}
+
+\kant[1-3]
+
+\section{Normal section title}
+
+\kant[4-5]
+
+\section[Short section title]
+        {This is a very long section title that will not fit in
+         the header}
+
+\kant[6-7]
+
+\end{document}

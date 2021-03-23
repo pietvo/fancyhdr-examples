@@ -1,0 +1,61 @@
+\documentclass[oneside]{book}
+\usepackage{kantlipsum}
+\usepackage{boxedminipage}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage[fit]{truncate}
+\fancyhead[LE,RO]{\nouppercase{%
+         \truncate{0.5\headwidth}{\rightmark}}} % Section title
+\fancyhead[LO,RE]{\nouppercase{%
+         \truncate{0.5\headwidth}{\leftmark}}} % Chapter title
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 34c in the \texttt{fancyhdr} documentation.
+
+This document has some very long chapter and section titles. We use the package \texttt{trunc} so that these titles are automatically truncated in the header.
+Check that the table of contents contains the long titles and the header contains the truncated titles where necessary.
+
+\begin{verbatim}
+\usepackage[fit]{truncate}
+\fancyhead[LE,RO]{\nouppercase{%
+         \truncate{0.5\headwidth}{\rightmark}}} % Section title
+\fancyhead[LO,RE]{\nouppercase{%
+         \truncate{0.5\headwidth}{\leftmark}}} % Chapter title
+\fancyfoot[C]{\thepage}
+
+\chapter{This is a very long chapter title to see if we can
+         give fancyhdr a shorter one that fits in the header}
+ . . .
+\section{This is a very long section title that will not fit
+         in the header}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+\chapter{This is a very long chapter title to see if we can
+         give fancyhdr a shorter one that fits in the header}
+\thispagestyle{fancy}
+
+\kant[2-4]
+
+\section{Normal section title}
+
+\kant[5-6]
+
+\section{This is a very long section title that will not fit
+         in the header}
+
+\kant[7]
+
+\end{document}

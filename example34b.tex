@@ -1,0 +1,75 @@
+\documentclass[oneside]{book}
+\usepackage{kantlipsum}
+\usepackage{boxedminipage}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}} % Section title
+\fancyhead[LO,RE]{\nouppercase{\leftmark}} % Chapter title
+\fancyfoot[C]{\thepage}
+
+\newcommand{\Section}[2]{%
+            \section[#1]{#1\sectionmark{#2}}\sectionmark{#2}}
+\newcommand{\Sectionx}[3]{%
+            \section[#3]{#1\sectionmark{#2}}\sectionmark{#2}}
+
+\begin{document}
+
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 34b in the \texttt{fancyhdr} documentation.
+
+This document has some very long chapter and section titles. We supply shorter ones in the header with extra \verb|\chaptermark| and \verb|\sectionmark| commands. In this example we have an extra paramater for the title in the table of contents.
+Check that the table of contents contains the proper titles and the header contains the shorter titles.
+
+We also define two macros to do the section titles. The first one \verb|\Section|, has two parameters, the long section title, which will also appear in the table of contents, and the short title for the header.
+There is also a command \verb|\Sectionx| with three parameters. The first one is the long section title in the text, the second one is the short title in the header and the third one is the title in the table of contents.
+
+\begin{verbatim}
+\newcommand{\Section}[2]{%
+            \section[#1]{#1\sectionmark{#2}}\sectionmark{#2}}
+\newcommand{\Sectionx}[3]{%
+            \section[#3]{#1\sectionmark{#2}}\sectionmark{#2}}
+
+\chapter{This is a long chapter title that does not fit
+         in the header}
+\chaptermark{This is a not so long chapter title}
+ . . .
+\Section{This is a long section title that will not fit in
+         the header}{Shortened section title}
+ . . .
+\Sectionx{This is another long section title that will not
+            fit in the header}{Short section title 3}
+           {This is the section title in the table of contents}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+\chapter{This is a long chapter title that does not fit in the header}
+\chaptermark{This is a not so long chapter title}
+\thispagestyle{fancy}
+
+\kant[1-3]
+
+\section{Normal section title}
+
+\kant[4-5]
+
+\Section{This is a long section title that will not fit in
+         the header}{Shortened section title}
+
+\kant[6-7]
+
+\Sectionx{This is another long section title that will not
+            fit in the header}{Short section title 3}
+           {This is the section title in the table of contents}
+
+\kant[8]
+
+\end{document}
