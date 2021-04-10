@@ -1,0 +1,128 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\firstleftxmark}
+\fancyhead[R]{\firstrightxmark}
+\fancyfoot[C]{\thepage}
+\renewcommand*{\sectionmark}[1]{\extramarksleft{\thesection\ #1}}
+\renewcommand*{\subsectionmark}[1]{\extramarksright{\thesubsection\ #1}}
+
+\begin{document}
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 35 in the \texttt{fancyhdr} documentation.
+
+In this document we put the first section title (left) and the first subsection title (right) in the page headers. This is hard (probably impossible) to achieve with the standard \LaTeX{} marks.
+
+We solve it with the new \texttt{extramarks.sty} (version 4.1 and later).
+
+\begin{verbatim}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\firstleftxmark}
+\fancyhead[R]{\firstrightxmark}
+\fancyfoot[C]{\thepage}
+\renewcommand*{\sectionmark}[1]{%
+    \extramarksleft{\thesection\ #1}%
+  }
+\renewcommand*{\subsectionmark}[1]{%
+    \extramarksright{\thesubsection\ #1}%
+  }
+\end{verbatim}
+
+In section~\ref{sec:missing} we have extra code to prevent a subsection title from a previous section to permeate in the new section if there is no subsection in the beginning pages of the new section.
+
+\begin{verbatim}
+\fancyheadinit{%
+  \ifextramarksmissing{left}{}
+  {% if there is a sectionmark on the page
+    \ifextramarksmissing {right}
+    % but no subsectionmark, then reset subsectionmark
+    {\extramarksreset{right}}
+    {}%
+  }%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+
+\section{Section One}
+
+\subsection{Subsection One}
+
+ \lipsum[1-2]
+
+\section{Section Two}
+
+ \lipsum[3]
+
+\subsection{Subsection Two}
+
+ \lipsum[4-7]
+
+\section{Third section}
+
+\textbf{This section ``inherits'' the subsection titles from the
+  previous section (2.1), which is ugly. See the next page. It could
+  even be a subsection title from several sections ago, see the next
+  section.}
+
+\medskip
+
+\lipsum
+
+\section{Fourth section}
+\label{sec:missing}
+
+\fancyheadinit{%
+  \ifextramarksmissing{left}{}
+  {% if there is a sectionmark on the page
+    \ifextramarksmissing {right}
+    % but no subsectionmark, then reset subsectionmark
+    {\extramarksreset{right}}
+    {}%
+  }%
+}
+
+\textbf{In this section we reset the ``inheritance'' of the subsection title if there is a section title, but no subsection title on the page. Therefore this page will have an empty subsection title in the header.}
+
+\begin{verbatim}
+\fancyheadinit{%
+  \ifextramarksmissing{left}{}
+  {% if there is a sectionmark on the page
+    \ifextramarksmissing {right}
+    % but no subsectionmark, then reset subsectionmark
+    {\extramarksreset{right}}
+    {}%
+  }%
+}
+\end{verbatim}
+
+\medskip
+
+\lipsum
+
+\subsection{A Fourth Subsection}
+
+\lipsum[8]
+
+\end{document}
+
+https://tex.stackexchange.com/q/586066/113546
+Answer:
+https://tex.stackexchange.com/a/587094/113546
