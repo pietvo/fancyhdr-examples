@@ -5,16 +5,37 @@
 
 \usepackage{fancyhdr}
 \usepackage{extramarks}
-\pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\firstleftxmark}
-\fancyhead[R]{\firstrightxmark}
+\newcommand\rightheader{\firstrightxmark}
+\fancyhead[R]{\rightheader}
 \fancyfoot[C]{\thepage}
 \renewcommand*{\sectionmark}[1]{\extramarksleft{\thesection\ #1}}
 \renewcommand*{\subsectionmark}[1]{\extramarksright{\thesubsection\ #1}}
 
+\newcommand\rightreset{%
+  \ifextramarksmissing{left}{}
+  {% if there is a sectionmark on the page
+    \ifextramarksmissing {right}
+    % but no subsectionmark. then reset subsectionmark
+    {\extramarksreset{right}}
+    {}%
+  }%
+}
+
+% Reset before the header only when the section was pushed to the next page
+% The counter 'thispage' contains the page number where the \section
+% command was processed, whereas 'page' is the page where the section
+% command actually appears. If it was pushed to the following page, do
+% the \rightreset (which will be before the actual mark).
+
+\newcounter{thispage}
+\newcommand\rightresetbefore{% 
+  \ifnum \value{thispage}<\value{page}\rightreset\fi
+}
+
 \begin{document}
-\thispagestyle{plain}
+\pagestyle{plain}
 \tableofcontents
 
 \bigskip
@@ -30,23 +51,23 @@ We solve it with the new \texttt{extramarks.sty} (version 4.1 and later).
 \begin{verbatim}
 \usepackage{fancyhdr}
 \usepackage{extramarks}
-\pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\firstleftxmark}
-\fancyhead[R]{\firstrightxmark}
+\newcommand\rightheader{\firstrightxmark}
+\fancyhead[R]{\rightheader}
 \fancyfoot[C]{\thepage}
 \renewcommand*{\sectionmark}[1]{%
-    \extramarksleft{\thesection\ #1}%
-  }
+    \extramarksleft{\thesection\ #1}}
 \renewcommand*{\subsectionmark}[1]{%
-    \extramarksright{\thesubsection\ #1}%
-  }
+    \extramarksright{\thesubsection\ #1}}
 \end{verbatim}
+\end{boxedminipage}
 
-In section~\ref{sec:missing} we have extra code to prevent a subsection title from a previous section to permeate in the new section if there is no subsection in the beginning pages of the new section.
+\begin{boxedminipage}{\textwidth}
+In section~\ref{sec:missing} we use extra code to prevent a subsection title from a previous section to permeate in the new section if there is no subsection in the beginning pages of the new section. Therefore we have used the macro \verb|\rightheader| above for the right header, so that we can redefine this later.
 
 \begin{verbatim}
-\fancyheadinit{%
+\newcommand\rightreset{%
   \ifextramarksmissing{left}{}
   {% if there is a sectionmark on the page
     \ifextramarksmissing {right}
@@ -55,7 +76,33 @@ In section~\ref{sec:missing} we have extra code to prevent a subsection title fr
     {}%
   }%
 }
+
+\newcounter{thispage}
+\newcommand\rightresetbefore{% 
+  \ifnum \value{thispage}<\value{page}\rightreset\fi
+}
 \end{verbatim}
+In that section~\ref{sec:missing} we change \verb|\sectionmark| to communicate to the header whether the section starts in the upper half or the lower half of the page. See the \textsf{fancyhdr} documentation for the explanation.
+
+\begin{verbatim}
+\renewcommand{\sectionmark}[1]{%
+  \extramarksleft{\thesection. #1}%
+  \ifdim\pagetotal<0.5\pagegoal
+    % put \rightreset before
+    \renewcommand\rightheader{\rightreset\firstrightxmark}%
+  \else
+    % save the current page number
+    \setcounter{thispage}{\value{page}}%
+    % put \rightreset after,
+    % but sometimes before (when page numbers differ)
+    \renewcommand\rightheader{%
+      \rightresetbefore\firstrightxmark\rightreset}%
+  \fi
+}
+\end{verbatim}
+
+The code that compares the page numbers can be seen in action in section~\ref{sec:six} on page~\pageref{sec:six}.
+
 \end{boxedminipage}
 
 \newpage
@@ -86,23 +133,28 @@ In section~\ref{sec:missing} we have extra code to prevent a subsection title fr
 
 \lipsum
 
+\renewcommand{\sectionmark}[1]{%
+  \extramarksleft{\thesection. #1}%
+  \ifdim\pagetotal<0.5\pagegoal
+    % put \rightreset before
+    \renewcommand\rightheader{\rightreset\firstrightxmark}%
+  \else
+    % save the current page number
+    \setcounter{thispage}{\value{page}}%
+    % put \rightreset after,
+    % but sometimes before (when page numbers differ)
+    \renewcommand\rightheader{%
+      \rightresetbefore\firstrightxmark\rightreset}%
+  \fi
+}
+
 \section{Fourth section}
 \label{sec:missing}
-
-\fancyheadinit{%
-  \ifextramarksmissing{left}{}
-  {% if there is a sectionmark on the page
-    \ifextramarksmissing {right}
-    % but no subsectionmark, then reset subsectionmark
-    {\extramarksreset{right}}
-    {}%
-  }%
-}
 
 \textbf{In this section we reset the ``inheritance'' of the subsection title if there is a section title, but no subsection title on the page. Therefore this page will have an empty subsection title in the header.}
 
 \begin{verbatim}
-\fancyheadinit{%
+\newcommand\rightreset{%
   \ifextramarksmissing{left}{}
   {% if there is a sectionmark on the page
     \ifextramarksmissing {right}
@@ -111,6 +163,7 @@ In section~\ref{sec:missing} we have extra code to prevent a subsection title fr
     {}%
   }%
 }
+\fancyheadinit{\rightreset}
 \end{verbatim}
 
 \medskip
@@ -119,7 +172,30 @@ In section~\ref{sec:missing} we have extra code to prevent a subsection title fr
 
 \subsection{A Fourth Subsection}
 
-\lipsum[8]
+\lipsum[8-11]
+
+\section{Fifth section}
+
+\textbf{This section starts at the lower half of the page. Therefore this page will inherit the subsection title in the header, but not on the next page.}
+
+\medskip
+
+\lipsum[1-7]
+
+\subsection{Fifth subsection}
+
+\lipsum[8-16]
+
+\vspace{2cm}
+
+\section{Sixth section}
+\label{sec:six}
+
+{\bfseries This section is processed at the lower half of  page~\thethispage. But as you can see it appears on page~\pageref{sec:six}. Therefore the code in \verb|\rightresetbefore| will come into action to do the reset before the header, because \mbox{thispage $<$ page}}
+
+\medskip
+
+\lipsum[1-6]
 
 \end{document}
 
