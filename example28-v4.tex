@@ -1,31 +1,25 @@
 \documentclass{report}
 \usepackage{lipsum}
 \usepackage{boxedminipage}
-\usepackage[a5paper]{geometry}
-\usepackage{extramarks}[=v3]
-\usepackage{ifthen}
+\usepackage[paperwidth=16.5cm, paperheight=21cm, left=4cm, right=2cm]{geometry}
+\usepackage{extramarks}[=v4]
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-
-\newcommand{\mysaved}{}
-
-\fancyhead[L]{Example 29c}
-\fancyhead[R]{\rightmark}
+\fancyhead[L]{\setlength{\unitlength}{\baselineskip}%
+  \begin{picture}(0,0)
+    \put(-2,-3){\makebox(0,0)[r]{\firstxmark}}
+  \end{picture}\rightmark} % \rightmark = section title
 \fancyfoot[R]{\lastxmark}
-\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
-  {\gdef\mysaved{}}
-  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued from previous page]}}}}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1pt}\\*
+  \par\noindent\rule{\textwidth}{1mm}\\*
   \extramarks{}{}%
-  \extramarks{(Continued)}{Continued on next page\ldots}%
+  \extramarks{Continued\ldots}{Continued on next page\ldots}%
 }{
-   \noindent\rule{\textwidth}{1pt}%
-   \extramarks{(Continued)}{}%
-   \extramarks{}{}%
-   \mysaved\par
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{Continued\ldots}{}%
+   \extramarks{}{}\par
  }
 
 \begin{document}
@@ -36,39 +30,35 @@
 \thispagestyle{plain}
 \noindent
 \begin{boxedminipage}{\textwidth}
-This is example 29c in the fancyhdr documentation.
+This is example 28 in the fancyhdr documentation.
 \\[1ex]
 \textbf{N.B. This version uses the old \texttt{extramarks} package, where the subsection titles in the headers are sometimes incorrect. It demonstrates the unwanted interaction between the ``extra marks'' and the normal \LaTeX{} marks. See page~3 where the header is ``1.1. THE PROBLEM'', but it should be ``1.2. EVALUATION''.}
 \\[1ex]
 It demonstrates the use of the \texttt{extramarks} package to implement
-a ``Continued\ldots'' footer.
+a ``Continued\ldots'' header/footer.
 
-It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
+However, in this example the ``Continued\ldots'' header is put in the margin, and the left header contains the section title. The width of the document is increased to make the margin wider. These are the only differences with Example 27.
 
-However, in this example, the text ``Continued from previous page'' is not put in the page header, but after the block. The page header is used for normal headers. This is done by storing this text in a \emph{variable} (macro). The value is saved while the page header is formed, and uses the footer field to check if the saved value must be empty or the text ``Continued from previous page''.
+It defines a \texttt{continued} environment that puts \verb|\extramarks| commands around its body to force the proper header and footer when the body crosses a page boundary, and empty ones when it doesn't cross them.
 
 \begin{verbatim}
-\newcommand{\mysaved}{}
-
-\fancyhead[L]{Example 29c}
-\fancyhead[R]{\rightmark}
+\fancyhead[L]{\setlength{\unitlength}{\baselineskip}%
+  \begin{picture}(0,0)
+    \put(-2,-3){\makebox(0,0)[r]{\firstxmark}}
+  \end{picture}\rightmark} % \rightmark = section title
 \fancyfoot[R]{\lastxmark}
-\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
-  {\gdef\mysaved{}}
-  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued
-                 from previous page]}}}}
-\fancypagestyle{plain}{%
+\fancypagestyle{plain}{
   \fancyhead{}\renewcommand{\headrule}{}}
-
+ . . . .
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1pt}\\*
+  \par\noindent\rule{\textwidth}{1mm}\\*
   \extramarks{}{}%
-  \extramarks{Continued}{Continued on next page\ldots}%
+  \extramarks{Continued\ldots}%
+             {Continued on next page\ldots}%
 }{
-   \noindent\rule{\textwidth}{1pt}%
-   \extramarks{Continued}{}%
-   \extramarks{}{}%
-   \mysaved\par
+   \noindent\rule{\textwidth}{1mm}%
+   \extramarks{Continued\ldots}{}%
+   \extramarks{}{}\par
  }
 \end{verbatim}
 
@@ -87,22 +77,22 @@ However, in this example, the text ``Continued from previous page'' is not put i
 
 \begin{continued}
   \textbf{We want to indicate that this block of text belongs together, with
-    `Continued' in page footer and after the block.}
+    `Continued' in header and footer.}
 
   \textit{This block crosses one page boundary.}
 
-  \lipsum[2]
+  \lipsum[2] %\lipsum
 
   \textbf{Here ends the  block of text that belongs together.}\\
 \end{continued}
 
 \section{Evaluation}
 
-\lipsum[3-6]
+\lipsum[3]
 
 \begin{continued}
   \textbf{We want to indicate that this block of text belongs together, with
-    `Continued' in page footer and after the block.}
+    `Continued' in header and footer.}
 
   \textit{This block crosses several page boundaries.}
 
@@ -110,7 +100,6 @@ However, in this example, the text ``Continued from previous page'' is not put i
 
   \textbf{Here ends the  block of text that belongs together.}\\
 \end{continued}
-Some closing text following the block.
 
 \chapter{Another chapter}
 
@@ -120,13 +109,12 @@ Some closing text following the block.
 
 \begin{continued}
   \textbf{We want to indicate that this block of text belongs together, with
-    `Continued' in page footer and after the block.}
+    `Continued' in header and footer if it crosses a page boundary.}
 
   \textit{This block stays within a page. Therefore no header/footer.}
 
   \textbf{Here ends the  block of text that belongs together.}\\
 \end{continued}
-Some more text after the block.
 
 \section{Another section}
 
