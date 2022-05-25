@@ -2,6 +2,7 @@
 \usepackage{lipsum}
 \usepackage{boxedminipage}
 \usepackage{ifthen}
+\usepackage{refcount}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead[LE,RO]{\textsl{\rightmark}}
@@ -17,7 +18,7 @@
 
 \fancypagestyle{switch}{
   \fancyhead[LE,RO]{%
-    \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+    \ifthenelse{\value{page}=\getpagerefnumber{otherpagestyle}}
       {MYFANCY SECTION}
       {\textsl{\rightmark}}}
 % The rest is inherited from pagestyle fancy
@@ -46,22 +47,22 @@
 
 \fancypagestyle{showstruts}{%
   \fancyhead[L]{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\strutheader}%
       {\rightmark}%
   }
   \fancyfoot[L]{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\strutfooter}%
       {}%
   }
   \fancyheadinit{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\renewcommand{\headruleskip}{4pt}}%
       {\renewcommand{\headruleskip}{0pt}}%
   }
   \fancyfootinit{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\renewcommand{\footrulewidth}{0.4pt}}%
       {\renewcommand{\footrulewidth}{0pt}}%
   }
@@ -169,7 +170,7 @@ For selecting a different page style for the page where a specific text appears 
 \begin{verbatim}
 \fancypagestyle{switch}{
   \fancyhead[LE,RO]{%
-    \ifthenelse{\value{page}=\pageref{otherpagestyle}}
+    \ifthenelse{\value{page}=\getpagerefnumber{otherpagestyle}}
       {MYFANCY SECTION}
       {\textsl{\rightmark}}}
 % The rest is inherited from fancy
@@ -248,22 +249,22 @@ Here is the code:
 \begin{verbatim}
 \fancypagestyle{showstruts}{%
   \fancyhead[L]{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\strutheader}%
       {\rightmark}%
   }
   \fancyfoot[L]{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\strutfooter}%
       {}%
   }
   \fancyheadinit{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\renewcommand{\headruleskip}{4pt}}%
       {\renewcommand{\headruleskip}{0pt}}%
   }
   \fancyfootinit{%
-    \ifthenelse{\value{page}=\pageref{showstruts}}%
+    \ifthenelse{\value{page}=\getpagerefnumber{showstruts}}%
       {\renewcommand{\footrulewidth}{0.4pt}}%
       {\renewcommand{\footrulewidth}{0pt}}%
   }
