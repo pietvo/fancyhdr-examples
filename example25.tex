@@ -128,7 +128,7 @@ The  \verb|\thispagestyle{myfancy}| works here, because it is given right at the
 \section{A wrong \cs{thispagestyle} attempt}
 
 \begin{boxedminipage}{\textwidth}
-In this section we will put a \verb|\thispagestyle{myfancy}| in the middle of the text. But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it encounters the \verb|\thispagestyle{myfancy}| command. That means \textbf{the MYFANCY SECTION header comes at the current page}. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. \textbf{Now the different header is no longer at the page where that text is.}
+In this section we will put a \verb|\thispagestyle{myfancy}| in the middle of the text. But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it is processing the \verb|\thispagestyle{myfancy}| command. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. So the text that contains the \verb|\thispagestyle{myfancy}| ends up at the next page. That means \textbf{the next page should have gotten the myfancy header}, but the current page actually gets it.  \textbf{Now the different header is no longer at the page where it says it should be.}
 \end{boxedminipage}
 
 \bigskip
