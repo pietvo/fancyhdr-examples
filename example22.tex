@@ -2,13 +2,17 @@
 \usepackage{lipsum}
 \usepackage{ifthen}
 \usepackage{lastpage}
+\usepackage{refcount}
 \usepackage{boxedminipage}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyfoot[C]{\thepage\ of \pageref{LastPage}}
-\fancyfoot[R]{\ifthenelse{\isodd{\value{page}} \and \not
-     \( \value{page}=\pageref{LastPage} \) }{please turn over}{}}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
+\fancyfoot[R]{%
+  \ifthenelse{\isodd{\value{page}} \and
+    \not \( \value{page}=\getpagerefnumber{LastPage} \) }%
+      {Please turn over}{}%
+}
 \begin{document}
 
 \tableofcontents
@@ -24,6 +28,7 @@ To get all this working you usually have to do one additional \LaTeX{} run.
 
 \begin{verbatim}
 \usepackage{lastpage}
+\usepackage{refcount}
  . . .
 \fancyfoot[C]{\thepage\ of \pageref{LastPage}}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
@@ -34,8 +39,11 @@ This example also puts  ``Please turn over'' in the righthand side footer on odd
 \begin{verbatim}
 \usepackage{ifthen}
  . . . 
-\fancyfoot[R]{\ifthenelse{\isodd{\value{page}} \and \not
-     \( \value{page}=\pageref{LastPage} \) }{please turn over}{}}
+\fancyfoot[R]{%
+  \ifthenelse{\isodd{\value{page}} \and
+    \not \( \value{page}=\getpagerefnumber{LastPage} \) }%
+      {Please turn over}{}%
+}
 \end{verbatim}
 \end{boxedminipage}
 
