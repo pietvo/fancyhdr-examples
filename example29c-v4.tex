@@ -21,8 +21,9 @@
   \par\noindent\rule{\textwidth}{1pt}\\*
   \extramarks{}{}%
   \extramarks{(Continued)}{Continued on next page\ldots}%
-}{
-   \noindent\rule{\textwidth}{1pt}%
+  \ignorespaces
+}{%
+   \unskip\noindent\rule{\textwidth}{1pt}%
    \extramarks{(Continued)}{}%
    \extramarks{}{}%
    \mysaved\par
@@ -63,10 +64,11 @@ However, in this example, the text ``Continued from previous page'' is not put i
 \newenvironment{continued}{%
   \par\noindent\rule{\textwidth}{1pt}\\*
   \extramarks{}{}%
-  \extramarks{Continued}{Continued on next page\ldots}%
-}{
-   \noindent\rule{\textwidth}{1pt}%
-   \extramarks{Continued}{}%
+  \extramarks{(Continued)}{Continued on next page\ldots}%
+  \ignorespaces
+}{%
+   \unskip\noindent\rule{\textwidth}{1pt}%
+   \extramarks{(Continued)}{}%
    \extramarks{}{}%
    \mysaved\par
  }

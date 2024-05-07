@@ -23,8 +23,9 @@
   \par\noindent\rule{\textwidth}{1mm}\\*
   \extramarks{}{}%
   \extramarks{Continued\ldots}{Continued on next page\ldots}%
-}{
-   \noindent\rule{\textwidth}{1mm}%
+  \ignorespaces
+}{%
+   \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{Continued\ldots}{}%
    \extramarks{}{}\par
  }
@@ -64,8 +65,9 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
   \extramarks{}{}%
   \extramarks{Continued\ldots}%
              {Continued on next page\ldots}%
-}{
-   \noindent\rule{\textwidth}{1mm}%
+  \ignorespaces
+}{%
+   \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{Continued\ldots}{}%
    \extramarks{}{}\par
  }
