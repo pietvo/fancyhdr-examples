@@ -2,14 +2,15 @@
 \usepackage{kantlipsum}
 \usepackage{boxedminipage}
 
-\usepackage{fancyhdr}
+\usepackage[twoside]{fancyhdr}
 \pagestyle{fancy}
 \usepackage[fit]{truncate}
+\fancyhf{}
 \fancyhead[LE,RO]{\nouppercase{%
          \truncate{0.5\headwidth}{\rightmark}}} % Section title
 \fancyhead[LO,RE]{\nouppercase{%
          \truncate{0.5\headwidth}{\leftmark}}} % Chapter title
-\fancyfoot[C]{\thepage}
+\fancyfoot[LE,RO]{\thepage}
 
 \begin{document}
 
