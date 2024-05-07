@@ -281,7 +281,11 @@ Here is the code:
 \begin{boxedminipage}{\textwidth}
 \textbf{Here we put the label \texttt{showstruts}, so the struts in the header and footer should appear on this page.}
 \label{showstruts}
-\end{boxedminipage}
+\end{boxedminipage}%
+\nopagebreak
+% Set the \verb|\headheight| to accomodate the larger \texttt{showstruts} header
+\setlength{\headheight}{16pt}%
+\addtolength{\topmargin}{-4.0pt}
 \medskip
 
 \lipsum[3-5]
