@@ -1,0 +1,46 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{makeidx}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}}
+\fancyhead[LO,RE]{\nouppercase{\leftmark}}
+\makeindex
+
+\begin{document}
+\chapter{Introduction}
+
+\index{lipsum}
+\begin{boxedminipage}{\textwidth}
+This is a test for \verb|\nouppercase|. 
+\begin{verbatim}
+\fancyhead[LE,RO]{{\rightmark}}
+\fancyhead[LO,RE]{{\leftmark}}
+\end{verbatim}
+On the Index page the header should be ``Index'' without uppercase because we use \verb|\nouppercase| in the headers.
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum[2]
+
+\chapter{Implementation}
+
+Introduction of this chapter
+
+\lipsum[3]
+
+\section{First steps}
+\label{sec:first-steps}
+
+\lipsum
+\printindex
+\newpage
+``Index'' should be in header without all uppercase.
+\end{document}

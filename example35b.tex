@@ -1,0 +1,216 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\fancyhead{}
+\fancyfoot[C]{\thepage}
+\fancypagestyle*{intro}{%
+  \renewcommand{\headrule}{}
+  \fancyhead[R]{INTRODUCTION}
+}
+\fancypagestyle{contents}[intro]{\fancyhead[R]{CONTENTS}}
+
+\fancyhead[L]{\firstleftxmark}
+\newcommand\rightheader{\firstrightxmark}
+\fancyhead[R]{\rightheader}
+\fancypagestyle*{fancy}{}
+
+\extramarksnewmark{which}
+
+\newcommand\checkrightreset{%
+  \ifextramarksmissing{left}
+  {}
+  {% if there is a sectionmark on the page
+    \ifnum\extramarkslast{which}=0
+      % that is the last (no subsection following on the page)
+      % then reset the subsection mark
+      \extramarksreset{right}%
+    \fi
+  }%
+}
+
+% Reset before the header only when the section was pushed to the next page
+% The counter 'thispage' contains the page number where the \section
+% command was processed, whereas 'page' is the page where the section
+% command actually appears. If it was pushed to the following page, do
+% the \checkrightreset (which will be before the actual mark).
+
+\newcounter{thispage}
+\newcommand\checkrightresetbefore{% 
+  \ifnum \value{thispage}<\value{page}\checkrightreset\fi
+}
+
+\renewcommand{\sectionmark}[1]{%
+  \extramarksleft{\thesection. #1}%
+  \extramarksput{which}{0}%
+  % save the current page number
+  \setcounter{thispage}{\value{page}}%
+  \ifdim\pagetotal<0.5\pagegoal
+    % put \checkrightreset before
+    \renewcommand\rightheader{\checkrightreset\firstrightxmark}%
+  \else
+    % put \checkrightreset after,
+    % but sometimes before (when page numbers differ)
+    \renewcommand\rightheader{%
+      \checkrightresetbefore\firstrightxmark\checkrightreset}%
+  \fi
+}
+
+\renewcommand{\subsectionmark}[1]{%
+  \extramarksright{\thesubsection\ #1}%
+  \extramarksput{which}{1}%
+}
+
+\begin{document}
+\pagestyle{intro}
+\thispagestyle{contents}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 35b, a variant of example 35 in the \texttt{fancyhdr} documentation.
+
+{\em In this variant we have the final code of example 35 directly in the preamble, without the intermediate stages. This is easier for later reference. It also means that the `flaw' in section~\ref{sec:flaw}, where there was an ``ugly inheritance'', is no longer there.}
+
+In this document we put the first section title (left) and the first subsection title (right) in the page headers. This is hard (probably impossible) to achieve with the standard \LaTeX{} marks.
+
+\textbf{NOTE: This requires the new \texttt{extramarks.sty} (version 5.0 or later).}
+
+\begin{verbatim}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\fancyhead{}
+\fancyhead[L]{\firstleftxmark}
+\newcommand\rightheader{\firstrightxmark}
+\fancyhead[R]{\rightheader}
+\fancyfoot[C]{\thepage}
+\end{verbatim}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We use extra code to prevent a subsection title from a previous section to permeate in a new section if there is no subsection in the beginning pages of the new section. Therefore we use the macro \verb|\rightheader| above for the right header, so that we can redefine this later. The criterion is whether there is a \verb|\section| command on the page that is not followed by a \verb|\subsection| command on the same page. This can't be check with the marks that we currently have. So we define a new mark \texttt{which} that contains the level of the [sub]section command (0 = section, 1 = subsection). We redefine \verb|\sectionmark| and \verb\subsectionmark\ to put 0 and 1, resp. in this mark, and then we check whether the last one on the page is 0.
+
+\begin{verbatim}
+\extramarksnewmark{which}
+
+\newcommand\checkrightreset{%
+  \ifextramarksmissing{left}
+  {}
+  {% if there is a sectionmark on the page
+    \ifnum\extramarkslast{which}=0
+      % that is the last (no subsection following on the page)
+      % then reset the subsection mark
+      \extramarksreset{right}%
+    \fi
+  }%
+}
+
+% \sectionmark and \subsectionmark, see below
+\end{verbatim}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We also change \verb|\sectionmark| to communicate to the header whether the section starts in the upper half or the lower half of the page.
+
+We also check whether the the section was pushed to the next page.
+The counter \texttt{thispage} contains the page number where the \verb|\section|
+command was processed, whereas \texttt{page} is the page where the section
+command actually appears. If it was pushed to the following page, do
+the \verb|\checkrightreset| (which will be before the actual mark).
+
+See the \textsf{fancyhdr} documentation for the explanation.
+
+\begin{verbatim}
+\newcounter{thispage}
+\newcommand\checkrightresetbefore{% 
+  \ifnum \value{thispage}<\value{page}\checkrightreset\fi
+}
+
+\renewcommand{\sectionmark}[1]{%
+  \extramarksleft{\thesection. #1}%
+  \extramarksput{which}{0}%
+  % save the current page number
+  \setcounter{thispage}{\value{page}}%
+  \ifdim\pagetotal<0.5\pagegoal
+    % put \checkrightreset before
+    \renewcommand\rightheader{\checkrightreset\firstrightxmark}%
+  \else
+    % put \checkrightreset after,
+    % but sometimes before (when page numbers differ)
+    \renewcommand\rightheader{%
+      \checkrightresetbefore\firstrightxmark\checkrightreset}%
+  \fi
+}
+
+\renewcommand{\subsectionmark}[1]{%
+  \extramarksright{\thesubsection\ #1}%
+  \extramarksput{which}{1}%
+}
+\end{verbatim}
+
+The code that compares the page numbers can be seen in action in section~\ref{sec:push} on page~\pageref{sec:push}.
+
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+
+\section{Section One}
+
+\subsection{Subsection One}
+
+ \lipsum[1-2]
+
+\section{Section Two}
+
+ \lipsum[3]
+
+\subsection{Subsection Two}
+
+ \lipsum[4-7]
+
+\section{Third section}
+\label{sec:flaw}
+
+{\bfseries In this section we see the reset of the ``inheritance'' of the subsection title if there is a section title, but no subsection title following it on the page. Therefore, because the following page doesn't have a subsection, it has the empty right header. On the current page we make it dependent on whether the \verb|\section| command is on the upper or lower half of the page. If it is on the lower half, we keep the inherited header only for this page; if it is on the upper half we also clear the right header on this page. This section starts on the lower half of the page, therefore it has the inherited subsection title in the right header.}
+
+\medskip
+
+\lipsum
+
+\section{Fourth section}
+\label{sec:missing}
+
+{\bfseries This section starts in the upper half of the page. Therefore this page will have an empty subsection title in the right header.}
+
+\medskip
+
+\lipsum[1-4]
+
+\subsection{A Fourth Subsection}
+
+\lipsum[7-9]
+
+\vspace{2cm}
+
+\section{Fifth section}
+\label{sec:push}
+
+{\bfseries This section is processed at the lower half of  page~\thethispage\ (counter \texttt{thispage}). But as you can see it has been pushed to page~\pageref{sec:push}.\\
+Therefore the code in \verb|\checkrightresetbefore| will come into action to do the reset before the header, because \mbox{thispage $<$ page}}
+
+\medskip
+
+\lipsum[1-6]
+
+\end{document}
+
+https://tex.stackexchange.com/q/586066/113546
+Answer:
+https://tex.stackexchange.com/a/587094/113546

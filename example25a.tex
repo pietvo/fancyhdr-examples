@@ -1,0 +1,149 @@
+\documentclass[openany]{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{ifthen}
+\usepackage{refcount}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\textsl{\rightmark}}
+\fancyhead[LO,RE]{\textsl{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\fancypagestyle{myfancy}{
+  \fancyhead[LE,RO]{MYFANCY SECTION}
+% The rest is inherited from fancy
+}
+
+\fancypagestyle{switch}{
+  \fancyhead[LE,RO]{%
+    \ifthenelse{\value{page}=\getpagerefnumber{otherpagestyle}}
+      {MYFANCY SECTION}
+      {\textsl{\rightmark}}}
+% The rest is inherited from fancy
+}
+
+\begin{document}
+\tableofcontents
+\newpage
+\thispagestyle{plain}
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 25 in the fancyhdr documentation.
+
+It demonstrates \verb|\thispagestyle|, both a good and a bad example.
+It also gives a better solution to change the page style in the middle of a text.
+The normal page style in this document is:
+\begin{verbatim}
+\pagestyle{fancy}
+\fancyhead[LE,RO]{\textsl{\rightmark}}
+\fancyhead[LO,RE]{\textsl{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\end{verbatim}
+We use the following additional page style \texttt{myfancy}. It just puts ``MYFANCY SECTION'' instead of the section title:
+\begin{verbatim}
+\fancypagestyle{myfancy}{
+  \fancyhead[LE,RO]{MYFANCY SECTION}
+% The rest is inherited from fancy
+}
+\end{verbatim}
+And for selecting a different page style, for the page where a specific text appears we put a label \texttt{otherpagestyle} in the text and then use a definition in the header that chosses either the normal value or the special value depending on the page number:
+\begin{verbatim}
+\fancypagestyle{switch}{
+  \fancyhead[LE,RO]{%
+    \ifthenelse{\value{page}=\getpagerefnumber{otherpagestyle}}
+      {MYFANCY SECTION}
+      {\textsl{\rightmark}}}
+% The rest is inherited from fancy
+}
+\end{verbatim}
+
+\end{boxedminipage}
+
+\chapter{Introduction}
+\thispagestyle{myfancy}
+
+Here we start with a \verb|\thispagestyle{myfancy}|. The header on this page comes out as\\
+on the left: \textsl{Introduction} (the normal header)\\
+on the right: MYFANCY SECTION
+
+The next page will have a more traditional header with chapter and section titles.
+
+\bigskip
+
+\lipsum[1]
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[2-3]
+
+\section{Evaluation}
+
+\lipsum[3-5]
+
+\newpage
+
+\section{Thispagestyle attempt}
+
+In this section we will put a \verb|\thispagestyle{myfancy}| in the middle of the text. But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it is processing the \verb|\thispagestyle{myfancy}| command. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. So the text that contains the \verb|\thispagestyle{myfancy}| ends up at the next page. That means \textbf{the next page should have gotten the myfancy header}, but the current page actually gets it.  \textbf{Now the different header is no longer at the page where it says it should be.}
+
+\bigskip
+
+\lipsum[6-8]
+
+\bigskip
+Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fer- mentum eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non, pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
+
+\bigskip
+
+\textbf{This page should have a different header than the surrounding pages. 
+\thispagestyle{myfancy}
+It is done with the} \verb|\thispagestyle{myfancy}| \textbf{command.
+However, it appears that the different header comes on the previous page.}
+
+\bigskip
+
+\lipsum[8-9]
+
+\newpage
+
+\section{A better solution}
+
+In this section we a better solution to the \verb|\thispagestyle{myfancy}| in the middle of the text. We set a label in the text that we want the different page style. Then we will use a test in our page style, and use different values depending on the page number. If the page number is equal to the page number of the label we use  \verb|\pagestyle{myfancy}|, otherwise the default  \verb|\pagestyle{fancy}|.
+
+But it appears that this text is close to the end of the page. So in this case \TeX{} is still on the current page when it encounters the \verb|\thispagestyle{myfancy}| command. That means \texttt{this page will get the myfancy header}. However, during the page breaking \TeX{} decides that the text will not fit on the page and moves it to the next page. Now the different header is no longer at the page where it says it should be.
+
+\bigskip
+
+\lipsum[6-8]
+
+\bigskip
+Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fer- mentum eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. 
+
+\pagestyle{switch}
+\noindent
+\begin{minipage}{\linewidth}
+  \textbf{This page should have a different header than the surrounding
+    pages. The header should contain \textnormal{``MYFANCY SECTION''}.
+    \label{otherpagestyle}
+    It is done with the} \verb|\pagestyle{switch}| \textbf{command, that
+    has tests in the header field definitions. This chooses the actual
+    header depending on the page number.}
+\end{minipage}
+\bigskip
+
+\lipsum[8-9]
+
+\newpage
+
+\textbf{This page should get the normal header again because the page number is different than the page number in the label.}
+ 
+\bigskip
+
+\lipsum[10]
+
+\end{document}
