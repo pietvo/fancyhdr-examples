@@ -12,11 +12,15 @@
 \fancyfoot[R]{\lastxmark}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter. #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection. #1}}
+
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par
   \extramarks{}{}%
+  \noindent\rule{\textwidth}{1mm}%
   \extramarks{Continued\ldots}{Continued on next page\ldots}%
-  \ignorespaces
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{Continued\ldots}{}%
@@ -31,9 +35,10 @@
 \thispagestyle{plain}
 \noindent
 \begin{boxedminipage}{\textwidth}
+\small
 This is example 28 in the fancyhdr documentation.
 \\[1ex]
-\textbf{N.B. This version uses the old \texttt{extramarks} package, where the subsection titles in the headers are sometimes incorrect. It demonstrates the unwanted interaction between the ``extra marks'' and the normal \LaTeX{} marks. See page~3 where the header is ``1.1. THE PROBLEM'', but it should be ``1.2. EVALUATION''.}
+\textbf{N.B.} This version uses the old \texttt{extramarks} package, where the subsection titles in the headers are sometimes incorrect. It demonstrates the unwanted interaction between the ``extra marks'' and the normal \LaTeX{} marks. See page~3 where the header is ``1.1. The Problem'', but it should be ``1.2. Evaluation''.
 \\[1ex]
 It demonstrates the use of the \texttt{extramarks} package to implement
 a ``Continued\ldots'' header/footer.
@@ -52,11 +57,11 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
   \fancyhead{}\renewcommand{\headrule}{}}
  . . . .
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par
   \extramarks{}{}%
-  \extramarks{Continued\ldots}%
-              {Continued on next page\ldots}%
-  \ignorespaces
+  \noindent\rule{\textwidth}{1mm}%
+  \extramarks{Continued\ldots}{Continued on next page\ldots}%
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{Continued\ldots}{}%
