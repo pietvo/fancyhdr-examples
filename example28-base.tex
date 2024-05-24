@@ -12,16 +12,20 @@
 \fancyfoot[R]{\lastxmark}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter. #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection. #1}}
+
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par
   %\extramarks{}{}%
+  \noindent\rule{\textwidth}{1mm}%
   %\extramarks{Continued\ldots}{Continued on next page\ldots}%
-  \ignorespaces
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    %\extramarks{Continued\ldots}{}%
    %\extramarks{}{}\par
- }
+}
 
 \begin{document}
 
@@ -31,9 +35,10 @@
 \thispagestyle{plain}
 \noindent
 \begin{boxedminipage}{\textwidth}
+\small
 This is example 28 in the fancyhdr documentation.
 \\[1ex]
-{\bfseries NOTE: This is the base version, where we have switched off the \verb|\extramarks| commands, to see how the subsection titles should come out in the headers. If you compare this with the version that uses the old (v4) version of \texttt{extramarks} you will see that there the headers may come out differently because of the interaction (interdependence) between the original marks and the new marks. In the newer version of \texttt{extramarks} (version 5.0 or newer) there is no interaction and the headers come out correctly.}
+{\bfseries NOTE:} This is the base version, where we have switched off the \verb|\extramarks| commands, to see how the subsection titles should come out in the headers. If you compare this with the version that uses the old (v4) version of \texttt{extramarks} you will see that there the headers may come out differently because of the interaction (interdependence) between the original marks and the new marks. In the newer version of \texttt{extramarks} (version 5.0 or newer) there is no interaction and the headers come out correctly.
 \\[1ex]
 It demonstrates the use of the \texttt{extramarks} package to implement
 a ``Continued\ldots'' header/footer.
@@ -52,16 +57,16 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
   \fancyhead{}\renewcommand{\headrule}{}}
  . . . .
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par
   %\extramarks{}{}%
-  %\extramarks{Continued\ldots}%
-  %           {Continued on next page\ldots}%
-  \ignorespaces
+  \noindent\rule{\textwidth}{1mm}%
+  %\extramarks{Continued\ldots}{Continued on next page\ldots}%
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    %\extramarks{Continued\ldots}{}%
    %\extramarks{}{}\par
- }
+}
 \end{verbatim}
 
 \end{boxedminipage}
