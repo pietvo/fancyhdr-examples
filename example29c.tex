@@ -7,27 +7,25 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-\newcommand{\mysaved}{}
-
+\newcommand{\ContiText}{}
 \fancyhead[L]{Example 29c}
 \fancyhead[R]{\rightmark}
-\fancyfoot[R]{\lastxmark}
-\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
-  {\gdef\mysaved{}}
-  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued from previous page]}}}}
+\fancyfoot[R]{\lastrightxmark}
+\fancyfoot[L]{\xdef\ContiText{\lastleftxmark}}
 \fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1pt}\\*
+  \par
   \extramarks{}{}%
-  \extramarks{(Continued)}{Continued on next page\ldots}%
-  \ignorespaces
+  \noindent\rule{\textwidth}{1pt}%
+  \extramarks{\\[1ex]\noindent\textbf{[Continued
+              from previous page]}}{Continued on next page\ldots}%
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1pt}%
-   \extramarks{(Continued)}{}%
    \extramarks{}{}%
-   \mysaved\par
- }
+   \ContiText\par
+}
 
 \begin{document}
 
@@ -37,6 +35,7 @@
 \thispagestyle{plain}
 \noindent
 \begin{boxedminipage}{\textwidth}
+\small
 This is example 29c in the fancyhdr documentation.
 
 It demonstrates the use of the \texttt{extramarks} package to implement
@@ -47,29 +46,27 @@ It defines a \texttt{continued} environment that puts \verb|\extramarks| command
 However, in this example, the text ``Continued from previous page'' is not put in the page header, but after the block. The page header is used for normal headers. This is done by storing this text in a \emph{variable} (macro). The value is saved while the page header is formed, and uses the footer field to check if the saved value must be empty or the text ``Continued from previous page''.
 
 \begin{verbatim}
-\newcommand{\mysaved}{}
-
+\newcommand{\ContiText}{}
 \fancyhead[L]{Example 29c}
 \fancyhead[R]{\rightmark}
-\fancyfoot[R]{\lastxmark}
-\fancyhead[C]{\ifthenelse{\equal{\lastxmark}{}}
-  {\gdef\mysaved{}}
-  {\gdef\mysaved{\\[1ex]\noindent\textbf{[Continued
-                 from previous page]}}}}
+\fancyfoot[R]{\lastrightxmark}
+\fancyfoot[L]{\xdef\ContiText{\lastleftxmark}}
 \fancypagestyle{plain}{%
   \fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1pt}\\*
+  \par
   \extramarks{}{}%
-  \extramarks{(Continued)}{Continued on next page\ldots}%
-  \ignorespaces
+  \noindent\rule{\textwidth}{1pt}%
+  \extramarks{\\[1ex]\noindent
+                \textbf{[Continued from previous page]}}
+             {Continued on next page\ldots}%
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1pt}%
-   \extramarks{(Continued)}{}%
    \extramarks{}{}%
-   \mysaved\par
- }
+   \ContiText\par
+}
 \end{verbatim}
 
 \end{boxedminipage}
