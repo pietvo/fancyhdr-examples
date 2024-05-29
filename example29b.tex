@@ -7,37 +7,34 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
+\newcommand\ContiText{}
 \newcommand*{\LM}{\noindent
   Continued from previous page\ldots\\[1ex]}
-\newcommand*{\DEBUG}[1]{#1} % For debugging
-%\newcommand*{\DEBUG}[1]{} % To disable debugging
+%\newcommand*{\DEBUG}[1]{#1} % For debugging
+\newcommand*{\DEBUG}[1]{} % To disable debugging
 \newcommand*{\APcommand}{}
-\newcommand*{\setAPcommand}{%
-  \gdef\APcommand{\firstxmark\setAP}}
-\newcommand*{\clearAPcommand}{%
-  \DEBUG{CLEAR}\gdef\APcommand{}}
-\newcommand*{\setAP}{\afterpage{%
-  \DEBUG{AFTERPAGE:}\APcommand}}
-\newcommand*{\startAP}{%
-  \ifx\APcommand\empty\setAPcommand\setAP\fi}
+\newcommand*{\setAPcommand}{\gdef\APcommand{\ContiText\setAP}}
+\newcommand*{\clearAPcommand}{\DEBUG{CLEAR}\gdef\APcommand{}}
+\newcommand*{\setAP}{\afterpage{\DEBUG{AFTERPAGE:}\APcommand}}
+\newcommand*{\startAP}{\ifx\APcommand\empty\setAPcommand\setAP\fi}
 
 \fancyhead[L]{Example 29b}
 \fancyhead[R]{\rightmark}
-\fancyfoot[R]{\lastxmark}
-\fancypagestyle{plain}{%
-  \fancyhead{}\renewcommand{\headrule}{}}
+\fancyfoot[R]{\lastrightxmark}
+\fancyfoot[L]{\xdef\ContiText{\lastleftxmark}}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par\startAP
   \extramarks{}{}%
+  \noindent\rule{\textwidth}{1mm}%
   \extramarks{\LM}{Continued on next page\ldots}%
-  \startAP
-  \ignorespaces
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{\LM}{}%
    \extramarks{}{\protect\clearAPcommand}\par
- }
+}
 
 \begin{document}
 
@@ -50,6 +47,7 @@
 
 \noindent
 \begin{boxedminipage}{\textwidth}
+\small
 This is example 29b in the fancyhdr documentation.
 
 It demonstrates the use of the \texttt{extramarks} package to implement
@@ -64,16 +62,18 @@ This example differs from Example 29a, in that we stop the sequence of \verb|\af
 
 \noindent
 \begin{boxedminipage}{\textwidth}
+\small
 For debugging purposes we add some extra text ``AFTERPAGE:'' to the \verb|\afterpage|, so that we can see the difference between an empty \texttt{afterpage} (pages 4, 7, 10) and no \texttt{afterpage} (pages 2, 8, 11, 12). Also we put ``CLEAR'' in those footers where \verb|\clearAPcommand| is called.
 
 \begin{verbatim}
+\newcommand\ContiText{}
 \newcommand*{\LM}{\noindent
   Continued from previous page\ldots\\[1ex]}
-\newcommand*{\DEBUG}[1]{#1} % For debugging
-%\newcommand*{\DEBUG}[1]{} % To disable debugging
+%\newcommand*{\DEBUG}[1]{#1} % For debugging
+\newcommand*{\DEBUG}[1]{} % To disable debugging
 \newcommand*{\APcommand}{}
 \newcommand*{\setAPcommand}{%
-  \gdef\APcommand{\firstxmark\setAP}}
+  \gdef\APcommand{\ContiText\setAP}}
 \newcommand*{\clearAPcommand}{%
   \DEBUG{CLEAR}\gdef\APcommand{}}
 \newcommand*{\setAP}{\afterpage{%
@@ -83,21 +83,21 @@ For debugging purposes we add some extra text ``AFTERPAGE:'' to the \verb|\after
 
 \fancyhead[L]{Example 29b}
 \fancyhead[R]{\rightmark}
-\fancyfoot[R]{\lastxmark}
-\fancypagestyle{plain}{%
-  \fancyhead{}\renewcommand{\headrule}{}}
+\fancyfoot[R]{\lastrightxmark}
+\fancyfoot[L]{\xdef\ContiText{\lastleftxmark}}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrule}{}}
 
 \newenvironment{continued}{%
-  \par\noindent\rule{\textwidth}{1mm}\\*
+  \par\startAP
   \extramarks{}{}%
+  \noindent\rule{\textwidth}{1mm}%
   \extramarks{\LM}{Continued on next page\ldots}%
-  \startAP
-  \ignorespaces
+  \\*\ignorespaces
 }{%
    \unskip\noindent\rule{\textwidth}{1mm}%
    \extramarks{\LM}{}%
    \extramarks{}{\protect\clearAPcommand}\par
- }
+}
 \end{verbatim}
 
 \end{boxedminipage}
