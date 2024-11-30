@@ -1,9 +1,9 @@
-This directory contains examples files for the package fancyhdr.
-The numbered 'example<n>.tex' files are examples from the documentation
+This directory contains examples files for the packages fancyhdr and extramarks.
+The numbered 'example⟨n⟩.tex' files are examples from the documentation
 (although in the current documentation they are not yet numbered).
 The others are various test cases, based on bug reports and
 questions that people have asked.
 
-Copyright © 2016-2021, Pieter van Oostrum.
+Copyright © 2016-2024, Pieter van Oostrum.
 Licensed under the LPPL (LaTeX Project Public License) Version 1.3c
 (see https://www.latex-project.org/lppl/)
