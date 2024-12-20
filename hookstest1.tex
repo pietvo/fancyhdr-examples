@@ -1,0 +1,28 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\AddToHook{fancyhdr/before}{\bfseries}
+\AddToHook{fancyhdr/after}{\rlap{\quad\rule{5mm}{5mm}}}
+
+\begin{document}
+\chapter{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is a test for the hooks in fancyhdr headers and footers.
+
+We use a \texttt{fancyhdr/before} hook to set the headers and footers bold,
+and a \texttt{fancyhdr/after} hook to add a black square at the end.
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+\end{document}

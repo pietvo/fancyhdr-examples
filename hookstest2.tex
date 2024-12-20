@@ -1,0 +1,34 @@
+\documentclass{book}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\AddToHook{fancyhdr/head/begin}{\bfseries}
+\AddToHook{fancyhdr/head/end}{\rlap{\quad\rule{5mm}{5mm}}}
+\AddToHook{fancyhdr/foot/begin}{\Large}
+\AddToHook{fancyhdr/foot/end}{\rule{0.2mm}{5mm}}
+
+\begin{document}
+\chapter{Introduction}
+
+\begin{boxedminipage}{\textwidth}
+This is a test for the hooks in fancyhdr headers and footers.
+
+We use a \texttt{fancyhdr/head/begin} hook to set the header bold,
+and a \texttt{fancyhdr/head/end} hook to add a black square at the end of the header.
+
+We use a \texttt{fancyhdr/foot/begin} hook to set the footer larger,
+and a \texttt{fancyhdr/foot/end} hook to add a vertical bar at the end of the footer.
+
+\end{boxedminipage}
+
+\section{The Problem}
+\label{sec:problem}
+
+\lipsum[1]
+
+\section{Evaluation}
+
+\lipsum
+\end{document}
