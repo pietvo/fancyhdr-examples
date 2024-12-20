@@ -1,0 +1,163 @@
+\documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{xcolor}
+
+\newcommand{\tb}{\textbackslash}
+\newcommand{\fhbox}{\texttt{\tb fancyhdrbox}}
+% Vertical bar to indicate measurements
+\newcommand{\R}{\rule[-0.3\baselineskip]{0.1pt}{\baselineskip}\hspace{-0.1pt}}
+
+\setlength\fboxsep{0pt}
+
+\newcommand{\showbaseline}{%
+  \begin{picture}(0,0)
+    \put(-1cm,0){\color{red}\rule{7cm}{0.1pt}}
+  \end{picture}%
+}
+
+\begin{document}
+
+This documents shows examples of \fhbox{} with different alignments. The red line shows the baseline for the alignment. Each example consists of two boxes with the same alignment and is preceded by the code for it (except the code for the baseline and the \texttt{\tb fbox} around it).
+
+\subsection*{t-aligned boxes:}
+
+\begin{verbatim}
+\fancyhdrbox[t]{%
+   ABC\hspace{2.5cm} \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[t]{%
+  \Huge ABC \\
+  DEF ghij
+}
+\end{verbatim}
+
+\fbox{\showbaseline\fancyhdrbox[t]{%
+   ABC\hspace{2.5cm} \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[t]{%
+  \Huge ABC \\
+  DEF ghij
+}}
+
+
+\subsection*{T-aligned boxes:}
+
+\begin{verbatim}
+\fancyhdrbox[T]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[T]{%
+  \Huge ABC \\
+  DEF ghij}
+\end{verbatim}
+\fbox{\showbaseline\fancyhdrbox[T]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[T]{%
+  \Huge ABC \\
+  DEF ghij}}
+
+\newpage
+
+\subsection*{b-aligned boxes:}
+
+\begin{verbatim}
+\fancyhdrbox[b]{%
+   ABC \\
+   xyz \\ XYZ \\
+   \Huge DEF ghij
+}%
+\fancyhdrbox[b]{%
+  \Huge ABC \\
+  DEF ghij}
+\end{verbatim}
+
+\fbox{\showbaseline\fancyhdrbox[b]{%
+   ABC \\
+   xyz \\ XYZ \\
+   \Huge DEF ghij
+}%
+\fancyhdrbox[b]{%
+  \Huge ABC \\
+  DEF ghij}}
+
+
+\subsection*{B-aligned boxes:}
+
+\begin{verbatim}
+\fancyhdrbox[B]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[B]{%
+  \Huge ABC \\
+  DEF ghij}
+\end{verbatim}
+
+\fbox{\showbaseline\fancyhdrbox[B]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij
+}%
+\fancyhdrbox[B]{%
+  \Huge ABC \\
+  DEF ghij}}
+
+\newpage
+
+\subsection*{c-aligned boxes:}
+
+The first box has an explicit \texttt{[c]} positioning, which implies both vertical and horizontal centering. The second one uses the default positioning (i.e. it is not explicitely specified), which make it \texttt{[cl]}, i.e horizontally left aligned.
+
+\begin{verbatim}
+\fancyhdrbox[c]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij %\rule{1pt}{\baselineskip}%
+}%
+\fancyhdrbox{%
+  \Huge ABC \\
+  DEF ghij}
+\end{verbatim}
+
+\fbox{\showbaseline\fancyhdrbox[c]{%
+   ABC \\
+   xyz \\ XYZ \\
+  \Huge DEF ghij %\rule{1pt}{\baselineskip}%
+}%
+\fancyhdrbox{%
+  \Huge ABC \\
+  DEF ghij}}
+
+\subsection*{c-aligned with width:}
+
+\begin{verbatim}
+\fancyhdrbox[c][0.4\textwidth]{%
+  ABC \\ xyz \\ XYZ\texttt{\textbackslash\textbackslash[10pt]} \\[10pt]
+  {\Huge DEF ghij}%
+}%
+\fancyhdrbox[c][0.2\textwidth]{%
+  {\Huge ABC}\\
+  DEF ghij}
+\end{verbatim}
+
+\noindent\R\makebox[0.4\textwidth]{0.4\tb textwidth}\R\makebox[0.2\textwidth]{0.2\tb textwidth}\R\\[2pt]
+\fbox{\showbaseline\fancyhdrbox[c][0.4\textwidth]{%
+  ABC \\ xyz \\ XYZ\texttt{\textbackslash\textbackslash[10pt]} \\[10pt]
+  {\Huge DEF ghij}%
+}%
+\fancyhdrbox[c][0.2\textwidth]{%
+  {\Huge ABC}\\
+  DEF ghij}}
+
+\end{document}

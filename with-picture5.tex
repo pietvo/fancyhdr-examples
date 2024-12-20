@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[headheight=45pt, includehead]{geometry} % for margins on a A4paper
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{kantlipsum}
+\usepackage[colorlinks]{hyperref}
+
+\newbox\dashbox\setbox\dashbox\hbox{-\,}
+\renewcommand{\headrule}{\smash{\makebox[\headwidth][c]{\xleaders\copy\dashbox\hfill-}}}
+
+\fancyhfoffset{1cm}
+\fancypagestyle{fancy}{
+  \fancyhf{}
+  \fancyhead[L]{%
+    \fancyhdrbox{\includegraphics[height=3\normalbaselineskip]{example-image}}
+    \fontsize{8}{9}\selectfont
+    \fancyhdrbox{%
+      Journal on Teaching Engineering, 1:1 (2015) 5-15 \\
+      ISSN XXX-XXXX \\
+      DOI: \href{https://doi.org/10.24840/2183-6493...}{10.24840/2183-6493\ldots}%
+    }}
+    
+  \fancyhead[R]{\fontsize{8}{9}\selectfont%
+    \fancyhdrbox[cr]{%
+      Received: XX October, XXXX \\
+      Revised: XX November, XXXX \\
+      Published: XX December, XXXX
+    }}
+  \fancyfoot[R]{
+    \fontsize{8}{8}\selectfont
+    \textbf{\thepage}}}
+
+\begin{document}
+\pagestyle{fancy}
+
+{\parskip=4pt \parindent=0pt
+This is an example of a multi-line header with an image, and three lines of text. The image and the text are vertically center-aligned with \verb|\fancyhdrbox|.
+
+The line under the header is a dashed line, \verb|\headline| is redefined to achieve this.
+
+Both the header and the footer are offset 1cm into the margin by the \verb|\fancyhfoffset| command.}
+
+\bigskip
+
+This is the code for the header:
+
+\begin{verbatim}
+\newbox\dashbox\setbox\dashbox\hbox{-\,}
+\renewcommand{\headrule}{\smash{\makebox[\headwidth][c]{\xleaders\copy\dashbox\hfill-}}}
+
+\fancyhfoffset{1cm}
+\fancypagestyle{fancy}{
+  \fancyhf{}
+  \fancyhead[L]{%
+    \fancyhdrbox{\includegraphics[height=3\normalbaselineskip]{example-image}}
+    \fontsize{8}{9}\selectfont
+    \fancyhdrbox{%
+      Journal on Teaching Engineering, 1:1 (2015) 5-15 \\
+      ISSN XXX-XXXX \\
+      DOI: \href{https://doi.org/10.24840/2183-6493...}{10.24840/2183-6493\ldots}%
+    }}
+    
+  \fancyhead[R]{\fontsize{8}{9}\selectfont%
+    \fancyhdrbox[cr]{%
+      Received: XX October, XXXX \\
+      Revised: XX November, XXXX \\
+      Published: XX December, XXXX
+    }}
+\end{verbatim}
+
+\bigskip
+
+\kant[1]
+
+\end{document}

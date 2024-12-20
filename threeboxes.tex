@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[headheight=40pt, includehead]{geometry} % for margins on a A4paper
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{kantlipsum}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily
+    \fancyhdrbox{\includegraphics[height=3\normalbaselineskip]{example-image}}}
+\fancyhead[R]{%
+  \fancyhdrbox[][4cm]{Our Office \\ Street 1 \\ City1 }%
+  \fancyhdrbox[l]{ Our Factory \\ Street 2 \\ City2 }
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+This example shows the use of \verb|\fancyhdrbox| in the header. The left header has an image in a \verb|\fancyhdrbox| with the default alignment. The right header has two  \verb|\fancyhdrbox|es, one with an explicit width of 4cm, the second one with its natural width.
+
+\textbf{Header definition:}
+
+\begin{verbatim}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily
+    \fancyhdrbox{\includegraphics[height=3\normalbaselineskip]{example-image}}}
+\fancyhead[R]{%
+  \fancyhdrbox[][4cm]{Our Office \\ Street 1 \\ City1 }%
+  \fancyhdrbox[l]{ Our Factory \\ Street 2 \\ City2 }
+}
+\end{verbatim}
+
+\kant[1-2]
+
+\end{document}

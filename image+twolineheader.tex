@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\setlength{\headheight}{68pt}
+
+\usepackage{fancyhdr}
+\fancyhf{}
+\pagestyle{fancy}
+\rhead{\fancyhdrbox{\Large First Long Title \\ \large Second title}}
+\lhead{\fancyhdrbox{\includegraphics[width=3cm]{example-image}}}
+
+\begin{document}
+
+This is a test for the \verb|\fancyhdrbox| command in the header. The header has an image in the left header and two lines of text in the right header. Both are placed in a \verb|\fancyhdrbox| with the default optional parameters, i.e. vertical positioning \texttt{c} and horizontal positioning \texttt{l}.
+
+So the text is vertically centered with respect to the image, and the two text lines are left aligned, but the block of the two lines is positioned rightmost in the header.
+
+\bigskip
+
+\lipsum
+
+\end{document}
