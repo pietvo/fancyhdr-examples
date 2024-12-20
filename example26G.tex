@@ -1,0 +1,91 @@
+\documentclass[a4paper]{article}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[C]{Normal Header}
+\usepackage{lipsum}
+
+\fancypagestyle{Special}{
+  % setting the header in beginning of environment
+  \fancyhead[C]{Special Header}
+}%
+
+\newenvironment{Special}[1]{%
+  \pagestyle{Special}%
+  \section*{Special Environment (#1)}
+}{%
+}
+
+\begin{document}
+
+This is example 26G in the \texttt{fancyhdr} documentation. It 
+demonstrates the use of a different page style inside an
+environment. When the environment ends, the page style is reset to the
+page style outside of the environment by the \TeX{} grouping mechanism.
+If we don't take measures, the page style of the last page will not be
+the one that we set inside the environment. The \LaTeX{} code used is:
+\begin{verbatim}
+\fancypagestyle{Special}{
+  % setting the header in beginning of environment
+  \fancyhead[C]{Special Header}
+}%
+
+\newenvironment{Special}[1]{%
+  \pagestyle{Special}%
+  \section*{Special Environment #1}
+}{%
+}
+\end{verbatim}
+
+\begin{Special}{a}
+
+{\itshape\lipsum}
+
+\bigskip
+
+{\bfseries Now here the environment ends before a \verb|\newpage| is
+  given, so the page style will be reset to the one that was current
+  outside of the environment and this page gets the wrong header (Normal
+  Header).}
+
+\end{Special}
+
+\clearpage
+
+\begin{Special}{b}
+
+{\itshape\lipsum}
+
+\bigskip
+
+{\bfseries Here we give an \verb|\clearpage| at the end of the
+  environment, so that the last page of the environment will get the
+  Special page style.}
+
+\clearpage
+
+\end{Special}
+
+\begin{Special}{c}
+
+{\itshape\lipsum}
+
+\bigskip
+
+{\bfseries Here we give a \verb|\thispagestyle{Special}| at the end of
+  the environment, so that the last page of the environment still gets
+  the special page style. However, this requires that the
+  \texttt{Special} pagestyle is defined outside of the environment, as
+  is done in this example. However if the special page style was defined
+  inside the environment, it will have disappeared at the end of the
+  page, and \LaTeX{} will silently ignore it. It doesn't even give an
+  error message. The following pages will get the Normal header again.}
+
+\thispagestyle{Special}
+
+\end{Special}
+
+\section*{This text is outside the \texttt{Special} environment}
+
+\lipsum
+
+\end{document}
