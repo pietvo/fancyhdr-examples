@@ -1,0 +1,183 @@
+\documentclass[a4paper,12pt,twoside]{report}
+
+\usepackage{blindtext}
+\usepackage{boxedminipage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\fancypagestyle*{fancy}{%
+  \fancyhf{}
+  \fancyhead[EL]{\leftmark}
+  \fancyhead[OR]{\rightmark}
+  \fancyfoot[C]{\thepage}
+}
+
+\newbox\dashbox\setbox\dashbox\hbox{-\,}
+\fancypagestyle*{tocstyle}{%
+  \fancyhf{}
+  \renewcommand{\headrule}{%
+    \nointerlineskip\smash{\makebox[\headwidth][c]{\xleaders\copy\dashbox\hfill-}}%
+    \rule{0pt}{2pt}% small strut
+  }
+  \fancyhead[L]{Special Page Style for \nouppercase\leftmark}
+  \fancyfoot[R]{\thepage}
+}
+\setlength{\headheight}{16.5pt}
+\setlength{\parindent}{0pt}
+
+\usepackage{makeidx}
+\makeindex
+
+\begin{document}
+
+\pagestyle{empty}
+\begin{center}
+  \Huge \textbf{Title Page}
+\end{center}
+\begin{boxedminipage}{\textwidth}
+This example shows different ways to change the page styles of the Table of Content, List of Figures/Tables, Bibliography, and Index, as described in section ``Page styles for Table of Content, List of Figures, Bibliography, etc.'' in the \texttt{fancyhdr} version 5 documentation.
+
+\addcontentsline{toc}{section}{Solution (a)}
+\raggedright\textbf{Solution (a)} uses \verb|\addtocontents| to insert a \verb|\thispagestyle{tocstyle}| in the Table of Contents and List of Figures.
+
+\begin{verbatim}
+\newpage
+\pagenumbering{roman}
+\pagestyle{tocstyle}
+\addtocontents{toc}{\protect\thispagestyle{tocstyle}}
+\tableofcontents
+
+\addtocontents{lof}{\protect\thispagestyle{tocstyle}}
+\listoffigures
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagenumbering{roman}
+\pagestyle{tocstyle}
+\addtocontents{toc}{\protect\thispagestyle{tocstyle}}
+\tableofcontents
+
+\addtocontents{lof}{\protect\thispagestyle{tocstyle}}
+\listoffigures
+
+\bigskip
+
+\begin{boxedminipage}{\textwidth}
+\addcontentsline{toc}{section}{Solution (b)}
+\textbf{Solution (b)} uses \verb|\fancypagestyleassign| to save and change the \texttt{plain} pagestyle for the List of Tables. When the main document text starts the \texttt{plain} pagestyle is restored to its original value.
+
+\begin{verbatim}
+\fancypagestyleassign{origplain}{plain}
+\fancypagestyleassign{plain}{tocstyle}
+\listoftables  
+
+% Here the main document text starts
+
+\clearpage 
+\fancypagestyleassign{plain}{origplain}
+\end{verbatim}
+\end{boxedminipage}
+
+\fancypagestyleassign{origplain}{plain}
+\fancypagestyleassign{plain}{tocstyle}
+\listoftables  
+
+% Here the main document text starts
+
+\clearpage 
+\fancypagestyleassign{plain}{origplain}
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\index{page style}
+\index{table of contents}
+
+\blinddocument
+\begin{figure}
+  \centering
+  \includegraphics[width=4cm]{example-image-a}
+  \caption{This is a figure}
+\end{figure}
+\blinddocument
+\blinddocument
+\begin{table}
+  \centering
+  \begin{tabular}{|l|c|r|}
+    \hline
+    a & b & c \\
+    \hline
+    d & e & f \\
+    \hline
+  \end{tabular}
+  \caption{This is a table}
+\end{table}
+\blinddocument
+\blinddocument
+
+\clearpage
+
+\begin{boxedminipage}{\textwidth}
+\addcontentsline{toc}{section}{Solution (c)}
+\textbf{Solution (c)} uses a hook on (before) the first \verb|\bibitem| in the bibliography to insert a \verb|\thispagestyle{tocstyle}|.
+
+\begin{verbatim}
+\AddToHookNext{cmd/bibitem/before}{\thispagestyle{tocstyle}}
+\end{verbatim}
+
+An alternative would be to use an `\texttt{after}' hook on the \verb|\thebibliography| command. This command is internally used to do the setup work for the \texttt{thebibliography} environment, but this is an implementation detail, so theoretically this could change in a future implementation, or an implementation in a different documentclass. But this is the hook that is executed at the right moment: after the setup, and before any bibliography items are added.
+
+\begin{verbatim}
+\AddToHook{cmd/thebibliography/after}{\thispagestyle{tocstyle}}
+\end{verbatim}
+\end{boxedminipage}
+
+\clearpage
+\pagestyle{tocstyle}
+\AddToHookNext{cmd/bibitem/before}{\thispagestyle{tocstyle}}
+%\AddToHook{cmd/thebibliography/after}{\thispagestyle{tocstyle}}
+
+% \nocite{*}
+% \bibliographystyle{plain}
+% \bibliography{testbibliography}
+
+\begin{thebibliography}{1}
+
+\bibitem{austen:jane}
+Jane Austen.
+\newblock {\em Pride and Prejudice}.
+
+\bibitem{bronte:c}
+Charlotte Brontë.
+\newblock {\em Jane Eyre}.
+
+\bibitem{bronte:e}
+Emily Brontë.
+\newblock {\em Wuthering Heights}.
+
+\bibitem{Garcia1984}
+Frank García~Lopéz and George Orwell.
+\newblock 1984.
+\newblock {\em Books About Big Brothers}, 5(42):100--111, 1948.
+
+\end{thebibliography}
+
+\bigskip
+
+\begin{boxedminipage}{\textwidth}
+\addcontentsline{toc}{section}{Solution (d)}
+\textbf{Solution (d)}. For the Index none of the solutions above can be used. But we can use a hook on the \verb|\thispagestyle| command that is used in the internal \verb|chapter*| command in the \verb|\printindex| command (the \verb|\thispagestyle| that gives us these problems). We just use an `\texttt{after}' hook to insert another \verb|\thispagestyle| that replaces the built-in one. In fact we could have used this same solution for each of the cases mentioned in this document.
+
+\begin{verbatim}
+\newpage
+\pagestyle{tocstyle}
+\AddToHookNext{cmd/thispagestyle/after}{\thispagestyle{tocstyle}}
+\printindex
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{tocstyle}
+\AddToHookNext{cmd/thispagestyle/after}{\thispagestyle{tocstyle}}
+\printindex
+
+\end{document}
