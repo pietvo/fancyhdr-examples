@@ -1,0 +1,130 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{extramarks}
+\fancyhead[L]{\firstleftxmark}
+\fancyhead[R]{\firstrightxmark}
+\usepackage{boxedminipage}
+
+% This version uses the package extramarks
+
+% Redefine the \part command:
+% \part[header]{title}
+% \part*[header]{title}
+% if the optional argument header is given, this will go into the
+% header, otherwise the title. For the non-* version, also the
+% `Part <n>' will be used in the header, if the optional argument is not
+% used.
+
+\newcommand\originalpart{}% check that we can define this name
+\let\originalpart\part
+\RenewDocumentCommand \part {som}{%
+  \IfBooleanTF{#1}
+    {% \part*
+      \originalpart*{#3}%
+      \IfNoValueTF{#2}% check if optional argument
+        {\extramarksleft{#3}\addcontentsline{toc}{part}{#3}}% T
+        {\extramarksleft{#2}\addcontentsline{toc}{part}{#2}}% F
+    }%
+    {% normal \part
+      \IfNoValueTF{#2}
+        {\originalpart{#3}\extramarksleft{\partname\ \thepart:\ #3}}
+        {\originalpart[#2]{#3}\extramarksleft{#2}}%
+    }%
+}
+
+\newcommand\originalsection{}% check that we can define this name
+\let\originalsection\section
+\RenewDocumentCommand \section {som}{%
+  \IfBooleanTF{#1}
+    {% \section*
+      \originalsection*{#3}% original \section* has no optional argument
+      \IfNoValueTF{#2}% check if optional argument
+        {\extramarksright{#3}\addcontentsline{toc}{section}{#3}}% T
+        {\extramarksright{#2}\addcontentsline{toc}{section}{#2}}% F
+    }
+    {% normal \section
+      \IfNoValueTF{#2}
+        {\originalsection{#3}}
+        {\originalsection[#2]{#3}}%
+    }%
+}
+\renewcommand{\sectionmark}[1]{\extramarksright{\thesection\quad #1}}
+
+\begin{document}
+\tableofcontents
+
+\part*{Intro}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+In this example we show how to get (numbered or unnumbered) part titles and unnumbered section titles in the page headers.
+
+Because the \verb|\part| command uses \verb|\markboth{}{}| (i.e. with empty arguments), we can't use the normal marks, as the first section/subsection mark after the \verb|\part| would not appear in the header.
+So we use the package extramarks.
+
+We redefine both the \verb|\part| and the \verb|\section| command. Both get an optional argument even with the \texttt{*} unnumbered) version, and both the numbered and unnumbered version are put in the Table of Contents and are used in the header. If there is an optional argument, this will be used instead of the mandatory argument in both the header and the Table of Contents.
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+{\small\begin{verbatim}
+\newcommand\originalpart{}% check that we can define this name
+\let\originalpart\part
+\RenewDocumentCommand \part {som}{%
+  \IfBooleanTF{#1}
+    {% \part*
+      \originalpart*{#3}%
+      \IfNoValueTF{#2}% check if optional argument
+        {\extramarksleft{#3}\addcontentsline{toc}{part}{#3}}% T
+        {\extramarksleft{#2}\addcontentsline{toc}{part}{#2}}% F
+    }%
+    {% normal \part
+      \IfNoValueTF{#2}
+        {\originalpart{#3}\extramarksleft{\partname\ \thepart:\ #3}}
+        {\originalpart[#2]{#3}\extramarksleft{#2}}%
+    }%
+}
+
+\newcommand\originalsection{}% check that we can define this name
+\let\originalsection\section
+\RenewDocumentCommand \section {som}{%
+  \IfBooleanTF{#1}
+    {% \section*
+      \originalsection*{#3}% original \section* has no optional argument
+      \IfNoValueTF{#2}% check if optional argument
+        {\extramarksright{#3}\addcontentsline{toc}{section}{#3}}% T
+        {\extramarksright{#2}\addcontentsline{toc}{section}{#2}}% F
+    }
+    {% normal \section
+      \IfNoValueTF{#2}
+        {\originalsection{#3}}
+        {\originalsection[#2]{#3}}%
+    }%
+}
+\renewcommand{\sectionmark}[1]{\extramarksright{\thesection\quad #1}}
+\end{verbatim}}
+\end{boxedminipage}
+
+\section{First section}
+
+\lipsum
+
+\part{Body}
+
+\section*{Second section}
+
+\lipsum
+
+\section[Optional argument]{With optional argument}
+
+\lipsum
+
+
+\section*[Starred with optional argument]{Fourth section}
+
+\lipsum
+
+\end{document}

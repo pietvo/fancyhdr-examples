@@ -1,0 +1,122 @@
+\documentclass{report}
+
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\rightmark}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+\usepackage{boxedminipage}
+
+% Redefine the \chapter command:
+% \chapter[header]{title}
+% \chapter*{title}
+% For the \chapter* version, we insert a \markboth command.
+% For the non-* version we just pass the arguments to the
+% original \chapter command.
+
+\newcommand\originalchapter{}% check that we can define this name
+\let\originalchapter\chapter
+\RenewDocumentCommand \chapter {som}{%
+  \IfBooleanTF{#1}
+    {% \chapter*
+      \originalchapter*{#3}%
+      \markboth{#3}{}%
+      % we can also put it in the Table of Contents
+      \addcontentsline{toc}{chapter}{#3}
+    }%
+    {% normal \chapter
+      \IfNoValueTF{#2}
+        {\originalchapter{#3}}
+        {\originalchapter[#2]{#3}}%
+    }%
+}
+
+\newcommand\originalsection{}% check that we can define this name
+\let\originalsection\section
+\RenewDocumentCommand \section {som}{%
+  \IfBooleanTF{#1}
+    {% \section*
+      \originalsection*{#3}%
+      \markright{#3}%
+      % we can also put it in the Table of Contents
+      \addcontentsline{toc}{section}{#3}
+    }%
+    {% normal \section
+      \IfNoValueTF{#2}
+        {\originalsection{#3}}
+        {\originalsection[#2]{#3}}%
+    }%
+}
+
+\begin{document}
+\tableofcontents
+
+\chapter*{Intro}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+In this example we show how to get (numbered or unnumbered) chapter titles and unnumbered section titles in the page headers.
+
+We redefine the \verb|\chapter| command. For the \texttt{*} (unnumbered)
+version, we add a \verb|\markboth| command and add it to the Table of
+Contents. For the non-* (numbered) version we just pass the arguments to
+the original \verb|\chapter| command.
+%\end{boxedminipage}
+
+%\noindent
+%\begin{boxedminipage}{\textwidth}
+{\small\begin{verbatim}
+\newcommand\originalchapter{}% check that we can define this name
+\let\originalchapter\chapter
+\RenewDocumentCommand \chapter {som}{%
+  \IfBooleanTF{#1}
+    {% \chapter*
+      \originalchapter*{#3}%
+      \markboth{#3}{}%
+      % we can also put it in the Table of Contents
+      \addcontentsline{toc}{chapter}{#3}
+    }%
+    {% normal \chapter
+      \IfNoValueTF{#2}
+        {\originalchapter{#3}}
+        {\originalchapter[#2]{#3}}%
+    }%
+}
+\end{verbatim}}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+{\small\begin{verbatim}
+\newcommand\originalsection{}% check that we can define this name
+\let\originalsection\section
+\RenewDocumentCommand \section {som}{%
+  \IfBooleanTF{#1}
+    {% \section*
+      \originalsection*{#3}%
+      \markright{#3}%
+      % we can also put it in the Table of Contents
+      \addcontentsline{toc}{section}{#3}
+    }%
+    {% normal \section
+      \IfNoValueTF{#2}
+        {\originalsection{#3}}
+        {\originalsection[#2]{#3}}%
+    }%
+}
+\end{verbatim}}
+\end{boxedminipage}
+
+\section*{First (unnumbered) section}
+
+\lipsum
+
+\chapter{Body}
+
+\section{Second (numbered) section}
+
+\lipsum
+
+\end{document}
