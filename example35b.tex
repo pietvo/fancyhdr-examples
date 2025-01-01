@@ -2,8 +2,8 @@
 
 \usepackage{lipsum}
 \usepackage{boxedminipage}
+\usepackage{ifthen}
 \usepackage{fancyhdr}
-\usepackage{extramarks}
 \fancyhead{}
 \fancyfoot[C]{\thepage}
 \fancypagestyle*{intro}{%
@@ -12,55 +12,59 @@
 }
 \fancypagestyle{contents}[intro]{\fancyhead[R]{CONTENTS}}
 
-\fancyhead[L]{\firstleftxmark}
-\newcommand\rightheader{\firstrightxmark}
-\fancyhead[R]{\rightheader}
-\fancypagestyle*{fancy}{}
+\NewMarkClass{section}
+\NewMarkClass{subsection}
+\NewMarkClass{which}
+\InsertMark{which}{0}
 
-\extramarksnewmark{which}
+\newcommand{\DEBUG}[1]{\message{#1}\ignorespaces} % Choose this for debugging
+%\newcommand{\DEBUG}[1]{}             % Choose this for no debuggingdebugging
 
-\newcommand\checkrightreset{%
-  \ifextramarksmissing{left}
-  {}
-  {% if there is a sectionmark on the page
-    \ifnum\extramarkslast{which}=0
-      % that is the last (no subsection following on the page)
-      % then reset the subsection mark
-      \extramarksreset{right}%
-    \fi
-  }%
+\fancypagestyle*{fancy}{%
+  \fancyhead[L]{\FirstMark{section}}
+  \fancyhead[R]{%
+    \IfMarksEqualTF{subsection}{top}{first}
+      {% no subsection mark on this page
+        \DEBUG{Page \thepage, no subsection mark on this page^^J}%
+        \ifthenelse{\TopMark{which}=1}{%
+          \DEBUG{Page \thepage, previous page ended in a subsection^^J}% 
+          % use previous subsection unless suppressed by which = -1
+          \ifthenelse{\FirstMark{which}<0} % -1
+            {\DEBUG{Page \thepage, right header suppressed by which = -1^^J}}% empty right header
+            {\FirstMark{subsection}}% or \TopMark{subsection}
+        }
+        {\DEBUG{Page \thepage, empty right header^^J}}%
+      }
+      {% if there is a subsectionmark on the page, use it
+        \DEBUG{Page \thepage, there is a subsection mark on this page^^J}%
+        \FirstMark{subsection}%
+      }%
+  }
 }
 
-% Reset before the header only when the section was pushed to the next page
-% The counter 'thispage' contains the page number where the \section
-% command was processed, whereas 'page' is the page where the section
-% command actually appears. If it was pushed to the following page, do
-% the \checkrightreset (which will be before the actual mark).
-
 \newcounter{thispage}
-\newcommand\checkrightresetbefore{% 
-  \ifnum \value{thispage}<\value{page}\checkrightreset\fi
+
+\newcommand{\which}{}
+\AddToHook{cmd/section/before}{%
+  \setcounter{thispage}{\value{page}}%
+  \DEBUG{Section \the\numexpr\value{section}+1\relax\space is processed on page \thepage,^^J
+    position \the\pagetotal\space of \the\pagegoal.^^J}%
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}\or 
+              \lengthtest{\pagetotal>0.9\pagegoal}}{%
+    \DEBUG{Section header near top of page^^J}%
+    \renewcommand\which{-1}%
+  }
+  {\renewcommand\which{0}}%
 }
 
 \renewcommand{\sectionmark}[1]{%
-  \extramarksleft{\thesection. #1}%
-  \extramarksput{which}{0}%
-  % save the current page number
-  \setcounter{thispage}{\value{page}}%
-  \ifdim\pagetotal<0.5\pagegoal
-    % put \checkrightreset before
-    \renewcommand\rightheader{\checkrightreset\firstrightxmark}%
-  \else
-    % put \checkrightreset after,
-    % but sometimes before (when page numbers differ)
-    \renewcommand\rightheader{%
-      \checkrightresetbefore\firstrightxmark\checkrightreset}%
-  \fi
-}
+  \InsertMark{section}{\thesection. #1}%
+  \InsertMark{which}{\which}%
+}%
 
 \renewcommand{\subsectionmark}[1]{%
-  \extramarksright{\thesubsection\ #1}%
-  \extramarksput{which}{1}%
+  \InsertMark{subsection}{\thesubsection. #1}%
+  \InsertMark{which}{1}%
 }
 
 \begin{document}
