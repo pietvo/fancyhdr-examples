@@ -1,0 +1,149 @@
+\documentclass[oneside]{report}
+
+\usepackage{xcolor}
+\usepackage{boxedminipage}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancypagestyleassign{plain}{fancy}
+\setlength{\headheight}{40pt}
+
+\fancyhead[L]{llllll llllll llllll llllll llllll llllll llllll\\
+              \color{red}\rule {\linewidth}{5mm}}
+\fancyhead[C]{cccc cccc cc cc cccc cccc\\
+              \color{green}\rule{\linewidth}{3mm}}
+\fancyhead[R]{rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr\\
+              \color{blue}\rule {\linewidth}{2mm}}
+
+\begin{document}
+
+\chapter{Intro}
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Here the default widths are used. There is overlap.
+
+  \medskip
+
+The header definitions:
+\begin{verbatim}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancypagestyleassign{plain}{fancy}
+\setlength{\headheight}{40pt}
+
+\fancyhead[L]{llllll llllll llllll llllll llllll llllll llllll\\
+              \color{red}\rule {\linewidth}{5mm}}
+\fancyhead[C]{cccc cccc cc cc cccc cccc\\
+              \color{green}\rule{\linewidth}{3mm}}
+\fancyhead[R]{rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr rrrrrr\\
+              \color{blue}\rule {\linewidth}{2mm}}
+\end{verbatim}
+\end{boxedminipage}
+\bigskip
+
+\newpage
+
+\section{First section}
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Here we define the width of the left and right header fields. The
+  center field width isn't specified, so it remains the default
+  \verb|\headwidth|. And there is overlap between the center field and
+  the other ones, but it is still centered in the header, because the
+  total of all widths $>$ \verb|\headwidth|.
+
+\begin{verbatim}
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+
+\newpage
+
+\section{Second section}
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Here we define the widths of all three header fields. The total width
+  is $>$ \verb|\headwidth|. So there is overlap between the center field
+  and the other ones, but it is still centered in the header.
+\begin{verbatim}
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.5\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.5\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+
+\newpage
+
+\section{Third section}
+
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Here we define the widths of all three header fields. The total width
+  is $<$ \verb|\headwidth|. And there is no overlap between the center
+  field and the other ones (the center and right fields just touch each other),
+  so the center field is still centered in the header.
+
+\begin{verbatim}
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.2\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.2\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+
+\newpage
+
+\section{Fourth section}
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Here we define the widths of all three header fields. The total width
+  is $<$ \verb|\headwidth|. But there would be overlap between the center
+  field and the right field if the center field would be centered horizontally in the header.
+  So now it is centered between the left and right fields.
+
+\begin{verbatim}
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.25\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.25\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\newpage
+
+\section{Fifth section}
+
+\noindent\begin{boxedminipage}{\textwidth}
+  Now we add a header offset to the left.
+
+\begin{verbatim}
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.25\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\fancyhfoffset[L]{2cm}
+\end{verbatim}
+  We change the offset after defining the field widths. The offset
+  changes \verb|\headwidth|, but we see that the changed
+  \verb|\headwidth| is pickup up by the header construction, because the
+  field widths are calculated at header construction time.
+\end{boxedminipage}
+
+\fancyheadwidth[L]{0.3\headwidth}
+\fancyheadwidth[C]{0.25\headwidth}
+\fancyheadwidth[R]{0.4\headwidth}
+\fancyhfoffset[L]{2cm}
+
+\end{document}
