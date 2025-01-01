@@ -6,26 +6,32 @@
 \begin{document}
 % TABLE OF CONTENTS
 \clearpage%
-\fancypagestyle{toc}{\fancyhf{}%
-\fancyhead[RO]{\thepage}%
-\fancyhead[RO]{\textsl{TABLE OF CONTENTS}}%
-\fancyfoot[C]{\thepage}}%
+\fancypagestyle{toc}{%
+  \fancyhf{}%
+  \fancyhead[RO]{\thepage}%
+  \fancyhead[RO]{\textsl{TABLE OF CONTENTS}}%
+  \fancyfoot[C]{\thepage}%
+}
 \pagestyle{toc}%
 \tableofcontents
 \clearpage%
-\fancypagestyle{list of tables}{\fancyhf{}%
-\fancyhead[RO]{\thepage}%
-\fancyhead[RO]{\textsl{LIST OF TABLES}}%
-\fancyfoot[C]{\thepage}}%
+\fancypagestyle{list of tables}{%
+  \fancyhf{}%
+  \fancyhead[RO]{\thepage}%
+  \fancyhead[RO]{\textsl{LIST OF TABLES}}%
+  \fancyfoot[C]{\thepage}%
+}
 \pagestyle{list of tables}%
 \listoftables
 %
 % LIST OF FIGURES
 \clearpage%
-\fancypagestyle{list of figures}{\fancyhf{}%
-\fancyhead[RO]{\thepage}%
-\fancyhead[RO]{\textsl{LIST OF FIGURES}}%
-\fancyfoot[C]{\thepage}}%
+\fancypagestyle{list of figures}{%
+  \fancyhf{}%
+  \fancyhead[RO]{\thepage}%
+  \fancyhead[RO]{\textsl{LIST OF FIGURES}}%
+  \fancyfoot[C]{\thepage}%
+}
 \pagestyle{list of figures}%
 \listoffigures
 \pagebreak
