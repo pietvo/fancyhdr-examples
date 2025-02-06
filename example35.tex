@@ -3,6 +3,7 @@
 \usepackage{lipsum}
 \usepackage{boxedminipage}
 \usepackage{ifthen}
+\usepackage{afterpage}
 \usepackage{fancyhdr}
 \fancyhead{}
 \fancyfoot[C]{\thepage}
@@ -22,14 +23,17 @@
 \renewcommand{\subsectionmark}[1]{%
     \markright{\thesubsection. #1}}
 
+% This is for the second half of the document.
+
 \NewMarkClass{section}
 \NewMarkClass{subsection}
 \NewMarkClass{which}
 \InsertMark{which}{0}
+\NewMarkClass{whichpage}
+\newcommand\whichpage{}
 
 \newcommand{\DEBUG}[1]{\message{#1}\ignorespaces} % Choose this for debugging
-%\newcommand{\DEBUG}[1]{}             % Choose this for no debuggingdebugging
-
+%\newcommand{\DEBUG}[1]{}             % Choose this for no debugging
 
 \begin{document}
 \pagestyle{intro}
@@ -40,49 +44,62 @@
 
 \noindent
 \begin{boxedminipage}{\textwidth}
-This is example 35 in the \texttt{fancyhdr} documentation.
+This is example 35 in the \textsf{fancyhdr} documentation.
 
-In this document we put the first section title (left) and the first subsection title (right) in the page headers. This is hard (probably impossible) to achieve with the standard \LaTeX{} marks.
+In this document we put the first section title (left) and the first subsection title (right) in the page headers. This is hard (probably impossible) to achieve with the traditional \LaTeX{} marks.
 
-\textbf{NOTE: This requires the new \texttt{extramarks.sty} (version 5.0 or later).}
+\textbf{NOTE: This requires a \LaTeX{} kernel that has the new marks mechanism (November 2022 or later).}
+
+\medskip
+
+This is the first attempt:
 
 \begin{verbatim}
 \usepackage{fancyhdr}
-\usepackage{extramarks}
-\fancyhead{}
-\fancyhead[L]{\firstleftxmark}
-\newcommand\rightheader{\firstrightxmark}
-\fancyhead[R]{\rightheader}
-\fancyfoot[C]{\thepage}
+\fancypagestyle*{fancy}{%
+  \fancyhead[L]{\FirstMark{2e-left}}
+  \fancyhead[R]{\FirstMark{2e-right-nonempty}}
+  \fancyfoot[C]{\thepage}
+}
+\pagestyle{fancy}
 \renewcommand{\sectionmark}[1]{%
-    \extramarksleft{\thesection\ #1}}
+    \markboth{\thesection. #1}{}}
 \renewcommand{\subsectionmark}[1]{%
-    \extramarksright{\thesubsection\ #1}}
+    \markright{\thesubsection. #1}}
 \end{verbatim}
 \end{boxedminipage}
 
 \noindent
 \begin{boxedminipage}{\textwidth}
-In section~\ref{sec:missing} we use extra code to prevent a subsection title from a previous section to permeate in the new section if there is no subsection in the beginning pages of the new section. Therefore we have used the macro \verb|\rightheader| above for the right header, so that we can redefine this later. The criterion is whether there is a \verb|\section| command on the page that is not followed by a \verb|\subsection| command on the same page. This can't be check with the marks that we currently have. So we define a new mark \texttt{which} that contains the level of the [sub]section command. We redefine \verb|\sectionmark| and \verb\subsectionmark\ to put ``0'' and ``1'', resp. in this mark, and then we check whether the last one on the page is ``0''.
+However, in section~\ref{sec:ugly_inheritance}, page~\pageref{sec:ugly_inheritance} we have the section title from that section~\ref{sec:ugly_inheritance}, but a subsection title from the previous section. This is ugly. In order to solve this we first change the code to use our own marks, so that we have more control. We need a mark for the section title, and one for the subsection title.
+
+\medskip
+
+Interim code:
 
 \begin{verbatim}
-\extramarksnewmark{which}
-
-\newcommand\checkrightreset{%
-  \ifextramarksmissing{left}
-  {}
-  {% if there is a sectionmark on the page
-    \ifnum\extramarkslast{which}=0
-      % that is the last (no subsection following on the page)
-      % then reset the subsection mark
-      \extramarksreset{right}%
-    \fi
-  }%
+\NewMarkClass{section}
+\NewMarkClass{subsection}
+\fancypagestyle*{fancy2}{%
+  \fancyhead[L]{\FirstMark{section}}
+  \fancyhead[R]{\FirstMark{subsection}}
 }
+\pagestyle{fancy2}
+\renewcommand{\sectionmark}[1]{%
+    \InsertMark{section}{\thesection. #1}}
+\renewcommand{\subsectionmark}[1]{%
+    \InsertMark{subsection}{\thesubsection. #1}}
+\end{verbatim}
+
+Now we have to check whether there is a \verb|\section| command on the page that is not followed by a \verb|\subsection| command on the same page. This can't be checked with the marks that we currently have. So we define an additional mark `\texttt{which}' that contains the level of the last [sub]section command. We redefine \verb|\sectionmark| and \verb\subsectionmark\ to put ``0'' and ``1'', resp. in this mark, and then we check in the right header whether there is a subsection title on the page, and if the the last value of `\texttt{which}' on the page is ``0'' or ``1''.
+
+\begin{verbatim}
+\NewMarkClass{which}
+\InsertMark{which}{0}% Initialize
 
 \renewcommand{\subsectionmark}[1]{%
-  \extramarksright{\thesubsection\ #1}%
-  \extramarksput{which}{1}%
+  \InsertMark{subsection}{\thesubsection. #1}%
+  \InsertMark{which}{1}%
 }
 
 % \renewcommand{\sectionmark}, see below
@@ -91,36 +108,35 @@ In section~\ref{sec:missing} we use extra code to prevent a subsection title fro
 
 \noindent
 \begin{boxedminipage}{\textwidth}
-In that section~\ref{sec:missing} we also change \verb|\sectionmark| to communicate to the header whether the section starts in the upper half or the lower half of the page.
+
+In section~\ref{sec:missing} we use the extra code to check this `\texttt{which}' mark to select the proper subsection title.
+
+In that section we also communicate to the header whether the section starts at or very near to the top of the page.
 
 We also check whether the the section was pushed to the next page.
-The counter \texttt{thispage} contains the page number where the \verb|\section|
-command was processed, whereas \texttt{page} is the page where the section
-command actually appears. If it was pushed to the following page, do
-the \verb|\checkrightreset| (which will be before the actual mark).
+The mark \texttt{whichpage} contains the page number where the \verb|\section|
+command was processed, whereas \verb|\thepage| is the page where the section
+command actually appears. If it was pushed to a following page, these two are different.
+Both these cases are stored in the variable \verb|\whichpage|, as a value that differs from \verb|\thepage| of the page where the section title appears.
 
 See the \textsf{fancyhdr} documentation for the explanation.
 
+\MakeLinkTarget{}\label{good_code}
 \begin{verbatim}
-\newcounter{thispage}
-\newcommand\checkrightresetbefore{% 
-  \ifnum \value{thispage}<\value{page}\checkrightreset\fi
+\NewMarkClass{whichpage}
+
+\AddToHook{cmd/section/before}{%
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}{%
+    % Section header near top of page
+    \renewcommand{\whichpage}{top\thepage}%
+  }
+  {\renewcommand{\whichpage}{\thepage}}%
 }
 
 \renewcommand{\sectionmark}[1]{%
-  \extramarksleft{\thesection\ #1}%
-  \extramarksput{which}{0}%
-  % save the current page number
-  \setcounter{thispage}{\value{page}}%
-  \ifdim\pagetotal<0.5\pagegoal
-    % put \checkrightreset before
-    \renewcommand\rightheader{\checkrightreset\firstrightxmark}%
-  \else
-    % put \checkrightreset after,
-    % but sometimes before (when page numbers differ)
-    \renewcommand\rightheader{%
-      \checkrightresetbefore\firstrightxmark\checkrightreset}%
-  \fi
+  \InsertMark{section}{\thesection\ #1}%
+  \InsertMark{which}{0}%
+  \InsertMark{whichpage}{\whichpage}%
 }
 \end{verbatim}
 
@@ -135,6 +151,10 @@ The code that compares the page numbers can be seen in action in section~\ref{se
 
 \subsection{Subsection One}
 
+\textbf{NOTE: Sections 1--3 use the simple version of the headers, which gives an `ugly inheritance' on page~\pageref{ugly_page}.}
+
+\smallskip
+
  \lipsum[1-2]
 
 \section{Section Two}
@@ -147,11 +167,12 @@ The code that compares the page numbers can be seen in action in section~\ref{se
  \lipsum[4-7]
 
 \section{Third section}
+\label{sec:ugly_inheritance}
 
-\textbf{This section ``inherits'' the subsection titles from the
-  previous section (\ref{sec:inherited}), which is ugly. See the next page. It could
-  even be a subsection title from several sections ago, see the next
-  section.}
+\textbf{This section ``inherits'' the subsection title from the
+  previous section (\ref{sec:inherited}), which is good on this page. But it should not be used on the next page.
+  It could even be a subsection title from several sections ago. We will repair this in the next section.}
+\afterpage{\MakeLinkTarget{}\label{ugly_page}}
 
 \medskip
 
@@ -163,13 +184,19 @@ The code that compares the page numbers can be seen in action in section~\ref{se
     \IfMarksEqualTF{subsection}{top}{first}
       {% no subsection mark on this page
         \DEBUG{Page \thepage, no subsection mark on this page^^J}%
-        \ifthenelse{\TopMark{which}=1}{%
-          \DEBUG{Page \thepage, previous page ended in a subsection^^J}% 
-          % use previous subsection unless suppressed by which = -1
-          \ifthenelse{\FirstMark{which}<0} % -1
-            {\DEBUG{Page \thepage, right header suppressed by which = -1^^J}}% empty right header
-            {\FirstMark{subsection}}% or \TopMark{subsection}
-        }
+        \ifthenelse{%
+          % previous page ended in a subsection
+          \TopMark{which}=1\and
+                 % Is there a section on the page?
+          \equal{\IfMarksEqualTF{section}{top}{first}
+                {\thepage}{\FirstMark{whichpage}}}{\thepage}}%
+          {
+            \DEBUG{Page \thepage, previous page ended in a subsection^^J
+                 and whichpage = \FirstMark{whichpage}}% 
+            % use previous subsection unless suppressed by section on top
+            \TopMark{subsection}% = \FirstMark{subsection}%
+          }
+        % otherwise use empty right header
         {\DEBUG{Page \thepage, empty right header^^J}}%
       }
       {% if there is a subsectionmark on the page, use it
@@ -184,24 +211,24 @@ The code that compares the page numbers can be seen in action in section~\ref{se
 % command was processed, whereas 'page' is the page where the section
 % command actually appears.
 
-\newcounter{thispage}
+\newcounter{thispage}% Only for the documentation
 
-\newcommand{\which}{}
 \AddToHook{cmd/section/before}{%
-  \setcounter{thispage}{\value{page}}%
   \DEBUG{Section \the\numexpr\value{section}+1\relax\space is processed on page \thepage,^^J
-    position \the\pagetotal\space of \the\pagegoal.^^J}%
-  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}\or 
-              \lengthtest{\pagetotal>0.9\pagegoal}}{%
+    position \the\pagetotal.^^J}%
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}{%
     \DEBUG{Section header near top of page^^J}%
-    \renewcommand\which{-1}%
-  }
-  {\renewcommand\which{0}}%
+    \renewcommand{\whichpage}{top\thepage}%
+  }%
+  {\renewcommand{\whichpage}{\thepage}}%
+  \setcounter{thispage}{\thepage}% Only for the documentation
 }
+
 \renewcommand{\sectionmark}[1]{%
   \InsertMark{section}{\thesection. #1}%
-  \InsertMark{which}{\which}%
-}%
+  \InsertMark{which}{0}%
+  \InsertMark{whichpage}{\whichpage}%
+}
 
 \renewcommand{\subsectionmark}[1]{%
   \InsertMark{subsection}{\thesubsection. #1}%
@@ -211,47 +238,48 @@ The code that compares the page numbers can be seen in action in section~\ref{se
 \section{Fourth section}
 \label{sec:missing}
 
-{\bfseries In this section we reset the ``inheritance'' of the subsection title if there is a section title, but no subsection title following it on the page. Therefore if the following pages wouldn't have a subsection, they would have the empty right header. On the current page we make it dependent on whether the \verb|\section| command is on the upper or lower half of the page. If it is on the lower half, we keep the inherited header only for this page; if it is on the upper half we also clear the right header on this page. Therefore this page will have an empty subsection title in the right header.}
+From this page on we suppress the ``inheritance'' of a subsection title if
+  \begin{itemize}
+  \item the previous page ended with a section, not a subsection,
+  \item or the current page has a section title at or near the top.
+  \end{itemize}
+On the current page there is no subsection, and the previous page ended on a section.
+Therefore this page will have an empty subsection title in the right header.
+
+\bigskip
+
+Besides the code on page~\pageref{good_code} we have the following definition of the headers (NOTE: the actual code also contains debugging commands). For explanation, see Example 35 in the \textsf{fancyhdr} documentation, in the section ``I want the first section and the first subsection in my headers''.
 
 \begin{verbatim}
-\newcommand\checkrightreset{%
-  \ifextramarksmissing{left}
-  {}
-  {% if there is a sectionmark on the page
-    \ifnum\extramarkslast{which}=0
-      % that is the last (no subsection following on the page)
-      % then reset the subsection mark
-      \extramarksreset{right}%
-    \fi
-  }%
+\fancypagestyle*{fancy2}{%
+  \fancyhead[L]{\FirstMark{section}}
+
+  \fancyhead[R]{%
+    \IfMarksEqualTF{subsection}{top}{first}
+      {% no subsection mark on this page
+        \ifthenelse{%
+          % previous page ended in a subsection
+          \TopMark{which}=1\and
+                 % Is there a section on the page?
+          \equal{\IfMarksEqualTF{section}{top}{first}
+                {\thepage}{\FirstMark{whichpage}}}{\thepage}}%
+          {
+            % use previous subsection unless suppressed by section on top
+            \TopMark{subsection}%
+          }
+        % otherwise use empty right header
+        {}%
+      }
+      {% if there is a subsectionmark on the page, use it
+        \FirstMark{subsection}%
+      }%
+  }
 }
 
-\newcounter{thispage}
-\newcommand\checkrightresetbefore{% 
-  \ifnum \value{thispage}<\value{page}\checkrightreset\fi
-}
-
-\renewcommand{\sectionmark}[1]{%
-  \extramarksleft{\thesection\ #1}%
-  \extramarksput{which}{0}%
-  % save the current page number
-  \setcounter{thispage}{\value{page}}%
-  \ifdim\pagetotal<0.5\pagegoal
-    % put \checkrightreset before
-    \renewcommand\rightheader{\checkrightreset\firstrightxmark}%
-  \else
-    % put \checkrightreset after,
-    % but sometimes before (when page numbers differ)
-    \renewcommand\rightheader{%
-      \checkrightresetbefore\firstrightxmark\checkrightreset}%
-  \fi
-}
-
-\renewcommand{\subsectionmark}[1]{%
-  \extramarksright{\thesubsection\ #1}%
-  \extramarksput{which}{1}%
-}
+\pagestyle{fancy2}
 \end{verbatim}
+
+The suppression of the inherited right header can be seen on the pages \pageref{sec:push} and \pageref{sec:newpage}.
 
 \medskip
 
@@ -263,36 +291,37 @@ The code that compares the page numbers can be seen in action in section~\ref{se
 
 \section{Fifth section}
 
-\textbf{This section starts at the lower half of the page. Therefore this page will inherit the subsection title in the header, but not on the next page.}
-
-\medskip
-
 \lipsum[1-7]
 
 \subsection{Fifth subsection}
 
-\lipsum[8-16]
+\lipsum[8-17]
 
 \section{Sixth section}
 \label{sec:push}
 
-{\bfseries This section is processed at the lower half of  page~\thethispage. But as you can see it has been pushed to page~\pageref{sec:push}.\\
-Therefore the code in \verb|\checkrightresetbefore| will come into action to do the reset before the header, because \mbox{thispage $<$ page}}
+{\bfseries This section is processed at the bottom of page~\thethispage. But as you can see it has been pushed to page~\pageref{sec:push}.}\\
+Therefore the code that checks if \verb|\FirstMark{whichpage}| is equal to \verb|\thepage| suppresses the right header
+(\verb|\FirstMark{whichpage}| = \thethispage{} and  \verb|\thepage| = \pageref{sec:push}).
 
 \medskip
 
 \lipsum[1-6]
 
-\iffalse
 \subsection{Sixth subsection}
 
 \lipsum[7]
 
 \newpage
 \section{Seventh section after a page break}
+\label{sec:newpage}
 
-\lipsum[8]
-\fi
+Because this section starts at the top of the page, and there is no subsection on this page, the right header is also empty.
+
+\medskip
+
+\lipsum[8-10]
+
 \end{document}
 
 https://tex.stackexchange.com/q/586066/113546
