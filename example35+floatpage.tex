@@ -1,0 +1,281 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\fancyhead{}
+\fancyfoot[C]{\thepage}
+\fancypagestyle*{intro}{%
+  \renewcommand{\headrule}{}
+  \fancyhead[R]{INTRODUCTION}
+}
+\fancypagestyle{contents}[intro]{\fancyhead[R]{CONTENTS}}
+
+\NewMarkClass{section}
+\NewMarkClass{subsection}
+\NewMarkClass{which}
+\InsertMark{which}{0}
+\NewMarkClass{whichpage}
+\newcommand\whichpage{}
+
+\newcommand{\DEBUG}[1]{\message{#1}\ignorespaces} % Choose this for debugging
+%\newcommand{\DEBUG}[1]{}             % Choose this for no debugging
+
+\fancypagestyle*{fancy}{%
+  \fancyhead[L]{\FirstMark{section}}
+  \fancyhead[R]{%
+    \IfMarksEqualTF{subsection}{top}{first}
+      {% no subsection mark on this page
+        \DEBUG{Page \thepage, no subsection mark on this page^^J}%
+        \ifthenelse{%
+          % previous page ended in a subsection
+          \TopMark{which}=1\and
+                 % Is there a section on the page?
+          \equal{\IfMarksEqualTF{section}{top}{first}
+                {\thepage}{\FirstMark{whichpage}}}{\thepage}}%
+          {
+            \DEBUG{Page \thepage, previous page ended in a subsection^^J
+                 and whichpage = \FirstMark{whichpage}}% 
+            % use previous subsection unless suppressed by section on top
+            \TopMark{subsection}% = \FirstMark{subsection}%
+          }
+        % otherwise use empty right header
+        {\DEBUG{Page \thepage, empty right header^^J}}%
+      }
+      {% if there is a subsectionmark on the page, use it
+        \DEBUG{Page \thepage, there is a subsection mark on this page^^J}%
+        \FirstMark{subsection}%
+      }%
+  }
+}
+
+\newcounter{thispage}
+
+\AddToHook{cmd/section/before}{%
+  \DEBUG{Section \the\numexpr\value{section}+1\relax\space is processed on page \thepage,^^J
+    position \the\pagetotal.^^J}%
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}{%
+    \DEBUG{Section header near top of page^^J}%
+    \renewcommand{\whichpage}{top\thepage}%
+  }%
+  {\renewcommand{\whichpage}{\thepage}}%
+  \setcounter{thispage}{\thepage}% Only for the documentation
+}
+
+\renewcommand{\sectionmark}[1]{%
+  \InsertMark{section}{\thesection. #1}%
+  \InsertMark{which}{0}%
+  \InsertMark{whichpage}{\whichpage}%
+}
+
+\renewcommand{\subsectionmark}[1]{%
+  \InsertMark{subsection}{\thesubsection. #1}%
+  \InsertMark{which}{1}%
+}
+
+\begin{document}
+\pagestyle{intro}
+\thispagestyle{contents}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 35+floatpage, a variant of example 35b in the \texttt{fancyhdr} documentation.
+
+{\em In this variant we have the final code of example 35 directly in the preamble, and we added a float page, to show that a section title can be pushed across more than one page boundary, and that this will be correctly detected.}
+
+In this document we put the first section title (left) and the first subsection title (right) in the page headers. This is hard (probably impossible) to achieve with the standard \LaTeX{} marks.
+
+\textbf{NOTE: This requires a \LaTeX{} kernel that has the new marks mechanism (November 2022 or later).}
+
+We define two marks: \texttt{section} and \texttt{subsection} for the section and subsection titles, resp.
+
+We also have to check whether there is a \verb|\section| command on the page that is not followed by a \verb|\subsection| command on the same page. This can't be checked with the standard \LaTeX{} marks. So we define an additional mark `\texttt{which}' that contains the level of the last [sub]section command. We redefine \verb|\sectionmark| and \verb\subsectionmark\ to put ``0'' and ``1'', resp. in this mark, and then we check in the right header whether there is a subsection title on the page, and if the the last value of `\texttt{which}' on the page is ``0'' or ``1''.
+
+\begin{verbatim}
+\NewMarkClass{section}
+\NewMarkClass{subsection}
+\NewMarkClass{which}
+\InsertMark{which}{0}
+\end{verbatim}
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We change \verb|\sectionmark| to communicate to the header whether the section starts at or near the top of the page.
+
+We also check whether the the section was pushed to the next page.
+The mark \texttt{whichpage} contains the page number where the \verb|\section|
+command was processed, whereas \verb|\thepage| is the page where the section
+command actually appears. If it was pushed to a following page, these two are different.
+Both these cases are stored in the variable \verb|\whichpage|, as a value that differs from \verb|\thepage| of the page where the section title appears.
+
+See the \textsf{fancyhdr} documentation for the explanation.
+
+\begin{verbatim}
+\NewMarkClass{whichpage}
+\newcommand\whichpage{}
+
+\AddToHook{cmd/section/before}{%
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}{%
+    % Section header near top of page
+    \renewcommand{\whichpage}{top\thepage}%
+  }
+  {\renewcommand{\whichpage}{\thepage}}%
+}
+
+\renewcommand{\sectionmark}[1]{%
+  \InsertMark{section}{\thesection. #1}%
+  \InsertMark{which}{0}%
+  \InsertMark{whichpage}{\whichpage}%
+}
+
+\renewcommand{\subsectionmark}[1]{%
+  \InsertMark{subsection}{\thesubsection. #1}%
+  \InsertMark{which}{1}%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\noindent
+\begin{boxedminipage}{\textwidth}
+Then in the right header we check if \texttt{whichpage} is equal to the actual page number \verb|\thepage|. The complete algorithm for the right header is:\\[1ex]
+
+\textbf{if} there is no subsection on the page\\
+\textbf{then}\\
+\hspace*{2em}\textbf{if} the previous page ended in a subsection\\
+\hspace*{3em}\textbf{and} there is no section title at or near the top of the page\\
+\hspace*{2em}\textbf{then} use (inherit) that subsection\\
+\hspace*{2em}\textbf{else} use an empty header\\
+\hspace*{2em}\textbf{fi}\\
+\textbf{else} (there is at least one subsection on the page)\\
+\hspace*{2em}use the first subsection\\
+\textbf{fi}\\[1ex]
+
+The test for ``there is no section title at or near the top of the page'' is by comparing \texttt{whichpage} to \verb|\thepage| and checking if there actually is a section title on the page.
+
+\begin{verbatim}
+\fancypagestyle*{fancy}{%
+  \fancyhead[L]{\FirstMark{section}}
+  \fancyhead[R]{%
+    \IfMarksEqualTF{subsection}{top}{first}
+      {% no subsection mark on this page
+        \ifthenelse{%
+          % previous page ended in a subsection
+          \TopMark{which}=1\and
+                 % Is there a section on the page?
+          \equal{\IfMarksEqualTF{section}{top}{first}
+                {\thepage}{\FirstMark{whichpage}}}{\thepage}}%
+          {
+            % use previous subsection unless suppressed
+            % by section on top
+            \TopMark{subsection}%
+          }
+        % otherwise use empty right header
+        {}}%
+      }
+      {% if there is a subsectionmark on the page, use it
+        \FirstMark{subsection}%
+      }%
+  }
+}
+\end{verbatim}
+
+The code that compares the page numbers can be seen in action in section~\ref{sec:push} on page~\pageref{sec:push} and section~\ref{sec:newpage} on page~ \pageref{sec:newpage}.
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+
+\section{Section One}
+
+\subsection{Subsection One}
+
+ \lipsum[1-2]
+
+\section{Section Two}
+
+ \lipsum[3]
+
+\subsection{Subsection Two}
+\label{sec:inherited}
+
+ \lipsum[4-7]
+
+\section{Third section}
+\label{sec:flaw}
+
+\textbf{This section ``inherits'' the subsection title from the
+  previous section (\ref{sec:inherited}), which is good on this page. But it is suppressed on the next page.}
+
+\medskip
+
+\lipsum
+
+\section{Fourth section}
+\label{sec:missing}
+
+{\bfseries This page has no subsection, and the previous page ended in a section (not a subsection). Therefore this page will have an empty right header.}
+
+\medskip
+
+\lipsum[1-4]
+
+\subsection{A Fourth Subsection}
+
+\lipsum[7-9]
+
+\section{Fifth section}
+
+\lipsum[1-7]
+
+\subsection{Fifth subsection}
+
+\lipsum[8-16]
+
+\begin{figure}[p]
+  \centering
+  \vspace{0.4\textheight}
+  \caption{A figure}
+\end{figure}
+
+\begin{table}[p]
+  \centering
+  \vspace{0.5\textheight}
+  \caption{A table}
+\end{table}
+
+\section{Sixth section}
+\label{sec:push}
+
+{\bfseries This section is processed at the bottom of page~\thethispage. But as you can see it has been pushed to page~\pageref{sec:push}.}\\
+Therefore the code that checks if \verb|\FirstMark{whichpage}| is equal to \verb|\thepage| suppresses the right header
+(\verb|\FirstMark{whichpage}| = \thethispage{} and  \verb|\thepage| = \pageref{sec:push}).
+
+\medskip
+
+\lipsum[1-6]
+
+\subsection{Sixth subsection}
+
+\lipsum[7]
+
+\newpage
+\section{Seventh section after a page break}
+\label{sec:newpage}
+
+Because this section starts at the top of the page, and there is no subsection on this page, the right header is also empty.
+
+\medskip
+
+\lipsum[8-10]
+
+\end{document}
+
+https://tex.stackexchange.com/q/586066/113546
+Answer:
+https://tex.stackexchange.com/a/587094/113546
