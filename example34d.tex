@@ -1,0 +1,53 @@
+\documentclass[oneside]{book}
+\usepackage{kantlipsum}
+\usepackage{boxedminipage}
+
+\usepackage[twoside]{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{35pt}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}} % Section title
+\fancyhead[LO,RE]{\nouppercase{\leftmark}}  % Chapter title
+\fancyfoot[LE,RO]{\thepage}
+\fancyheadwidth[L,R]{0.48\headwidth}
+
+\begin{document}
+
+\thispagestyle{plain}
+\tableofcontents
+
+\bigskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 34d in the \texttt{fancyhdr} documentation.
+
+This document has some very long chapter and section titles. We use the \verb|\fancyheadwidth| command to fit the titles each in their own half of the header (actually slightly less than half). This command is available in \texttt{fancyhdr} version 5.0 and later.
+
+\begin{verbatim}
+\setlength{\headheight}{35pt}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}} % Section title
+\fancyhead[LO,RE]{\nouppercase{\leftmark}}  % Chapter title
+\fancyfoot[LE,RO]{\thepage}
+\fancyheadwidth[L,R]{0.48\headwidth}
+\end{verbatim}
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+\chapter{This is a very long chapter title to see if we can
+          let fancyhdr fit it in the header}
+\thispagestyle{fancy}
+
+\kant[2-4]
+
+\section{Normal section title}
+
+\kant[5-6]
+
+\section{This is a very long section title that will not fit
+         in the header}
+
+\kant[7]
+
+\end{document}
