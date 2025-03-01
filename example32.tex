@@ -1,0 +1,653 @@
+\documentclass[twoside]{article}
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{typearea}
+\usepackage[a4paper,includeheadfoot]{geometry}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{afterpage}
+\usepackage{rotating}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{url}
+%\usepackage[pdftex]{lscape}
+\usepackage{pdflscape}
+\usepackage{fancyhdr}
+\fancypagestyle*{fancy}{%
+  \fancyhead{}
+  \fancyhead[LE,RO]{\nouppercase{\leftmark}}
+}
+\pagestyle{fancy}
+
+\newcommand\letterhead{%
+  \fancycenter{\includegraphics[height=4cm,valign=t]{example-image-a}}
+              {}
+              {\fancyhdrbox[t]{COMPANY NAME\\Street Address\\City}}%
+}
+\fancypagestyle{letterhead}{%
+  \fancyhf{}
+  \fancyhead[L]{\smash{\letterhead}}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrule}{}  
+}
+\renewcommand\thesection{\Alph{section}}
+
+% make the table of contents more compact
+\usepackage[titles]{tocloft}
+\setlength\cftbeforesecskip{2pt}
+
+\newcommand\cs[1]{\textbackslash\texttt{#1}}
+
+\begin{document}
+\thispagestyle{letterhead}
+\vspace*{4cm}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 32 in the \texttt{fancyhdr} documentation. It demonstrates various ways to handle changes in page layout (header and/or footer size, page size, etc.) with or without \texttt{fancyhdr}.
+\end{boxedminipage}
+
+\tableofcontents
+
+% Here the document begins
+
+\section{Tall header on the first page}
+\label{sec:firstpage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Here we have an extra tall header on the first page (logo + company information). This could for example be the letterhead. We use a normal \texttt{fancyhdr} header, but we put a \cs{smash} around the header so that its height is hidden (effectively this makes the height 0). Otherwise \texttt{fancyhdr} would give a warning that the header is too high. It doesn't change the layout.
+
+To compensate for the extra space that the header takes we add a \verb|\vspace*{4cm}| at the beginning of the page. Depending on the aesthetics of the user this could be a bit less or more.
+\end{boxedminipage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\usepackage[export]{adjustbox}
+\newcommand\letterhead{%
+  \fancycenter{\includegraphics[height=4cm,valign=t]{example-image-a}}
+              {}
+              {\fancyhdrbox[t]{COMPANY NAME\\Street Address\\City}}
+}
+\fancypagestyle{letterhead}{%
+  \fancyhf{}
+  \fancyhead[L]{\smash{\letterhead}}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrule}{}  
+}
+. . .
+\thispagestyle{letterhead}
+\vspace*{4cm}
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\lipsum[1-6]
+
+\newpage
+\thispagestyle{plain}
+\vspace*{-\dimeval{\headheight+\headsep+\topskip}}
+\noindent\letterhead
+
+\section{Another way to do the tall header}
+\label{sec:vspace}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+The technique of the previous section can be applied to any page which starts on a new page (i.e., after \cs{newpage} or similar commands). This page is such a page. However, here we will achieve the same effect in a different way. We can use an empty header, for example \verb|\pagestyle{plain}|, and then put the required header (letterhead) in the main text, but moved up to where the header would be. We do this with a negative \cs{vspace}. The amount is $-(\verb|\headheight+\headsep+\topskip|)$.
+
+\begin{verbatim}
+\thispagestyle{plain}
+\vspace*{-\dimeval{\headheight+\headsep+\topskip}}
+\noindent\letterhead
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\lipsum[1-5]
+
+\section{Can we do this without a page break?}
+\label{sec:afterpage}
+
+\afterpage{\thispagestyle{letterhead}\vspace*{4cm}%
+  % The next 2 lines are for debugging
+  \noindent\textbf{NOTE: The above header was inserted with \cs{afterpage}}
+  \par\medskip
+}
+% \afterpage{\thispagestyle{plain}%
+%   \vspace*{-\dimeval{\headheight+\headsep+\topskip}}%
+%   \letterhead
+%   \vspace*{\dimeval{\headheight+\headsep+\topskip}}%
+% }
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We can use this technique also without a page break if we are a bit careful. So in this section we set up the tall header to be applied to the next page. We use the technique that is described in the \texttt{fancyhdr} documentation, section 28.2 (Changing the page style of the next page). We use an \cs{afterpage} there, and we combine this with the technique from section~\ref{sec:firstpage}, because this is the simplest.
+\begin{verbatim}
+\usepackage{afterpage}
+. . .
+\afterpage{\thispagestyle{letterhead}\vspace*{4cm}}
+\end{verbatim}
+ We could also use the technique from section~\ref{sec:vspace}, but then we have to compensate the negative \cs{vspace} with a positive one after the letterhead, which is more complicated.
+\begin{verbatim}
+\afterpage{\thispagestyle{plain}%
+  \vspace*{-\dimeval{\headheight+\headsep+\topskip}}%
+  \letterhead
+  \vspace{\dimeval{\headheight+\headsep+\topskip}}%
+}
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\lipsum
+
+\section{Changing \cs{headheight} with the \texttt{geometry} package}
+\label{sec:geomheadheight}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+We could also use the \texttt{geometry} package to change the \cs{headheight} of a single page or a few pages with the \cs{newgeometry} command, and restore the original one with \cs{restoregeometry}.
+However, these commands both introduce a page break. If that is not a problem, this might be the cleanest solution. So on the next page we put the tall header in this way. We increase the  \cs{headheight} and then we have to make the \cs{textheight} accordingly smaller. This can be done by using the \texttt{includehead} option in \texttt{geometry}, or \texttt{includeheadfoot} if we also want to change the footer height.
+
+\begin{verbatim}
+\usepackage[a4paper,includeheadfoot]{geometry}
+. . .
+\fancypagestyle{tallheader}{%
+  \fancyhf{}
+  \fancyhead[L]{\raisebox{\depth}{\letterhead}}
+  \fancyfoot[C]{\thepage}
+}
+
+\newgeometry{headheight=118pt,includeheadfoot}
+\thispagestyle{tallheader}
+. . .
+\restoregeometry
+\end{verbatim}
+\end{boxedminipage}
+
+\bigskip
+
+\fancypagestyle{tallheader}{%
+  \fancyhf{}
+  \fancyhead[L]{\raisebox{\depth}{\letterhead}}
+  \fancyfoot[C]{\thepage}
+}
+
+\newgeometry{headheight=118pt,includeheadfoot}
+\thispagestyle{tallheader}
+
+\lipsum[1-4]
+
+\restoregeometry
+
+\section{A tall footer on this page}
+
+\fancypagestyle{tallfooter}{%
+  \fancyfoot[L]{\smash{\includegraphics[height=4cm,valign=b]{example-image-a}}}
+}
+
+\thispagestyle{tallfooter}
+\enlargethispage{-4cm}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Now we want to do the same with the footer: a taller footer on the current page. We can define a new page style \texttt{tallfooter} with the tall footer (e.g. a logo), and keep the footer height the same. To prevent warnings from \texttt{fancyhdr} we also use \cs{smash} to hide the footer height from \texttt{fancyhdr}.
+
+However, if the page is filled normally with text, the footer will overwrite the bottom of the text. We need extra white space at the bottom. This can de done with the \cs{enlargethispage} command with a negative length.
+
+\textbf{NOTE:} We have to be careful, not to put this code too close to the bottom of the page, otherwise it will not work. As this kind of construct is often used at the first page of a document, it is best to put it also at the beginning.
+\begin{verbatim}
+\fancypagestyle{tallfooter}{%
+  \fancyfoot[L]{\smash{\includegraphics[height=4cm,valign=b]{example-image-a}}}
+}
+. . .
+\thispagestyle{tallfooter}
+\enlargethispage{-4cm}
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\lipsum[1-6]
+
+\section{A tall footer on the next page}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+As a curiosity, we can also use the technique from section~\ref{sec:afterpage} to change the footer on the next page, with the \cs{afterpage} command.
+
+\begin{verbatim}
+\afterpage{\thispagestyle{tallfooter}%
+           \enlargethispage{-4cm}}
+\end{verbatim}
+\end{boxedminipage}
+\medskip
+
+\afterpage{\thispagestyle{tallfooter}%
+           \enlargethispage{-4cm}}
+
+\lipsum[1-5]
+
+\section{Different header heights on even and odd pages}
+\label{sec:evenodd}
+
+\newcommand\evenhead{%
+  \fancycenter{\fancyhdrbox[T]{\includegraphics[height=2cm]{example-image}}}
+              {}
+              {\Huge\fancyhdrbox[T]{EVEN PAGE HEADER\\SECOND LINE}}}
+
+\fancypagestyle{evenodd}{%
+  \fancyhf{}
+  \fancyhead[LE]{\smash{\evenhead}}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+\newcommand{\nextpage}{%
+  \thispagestyle{evenodd}%
+  \ifodd\value{page}%
+    \vspace*{-\dimeval{\headheight+\headsep+\topskip}}%
+  \else
+    \vspace*{2cm}% or \rule{0pt}{2cm}%
+  \fi
+  \afterpage{\nextpage}%
+}
+
+\afterpage{\nextpage}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+Now we extend this technique to have different header heights on left
+(even) and right (odd) pages.
+
+The layout we are going to make takes two pages (a ``spread'') together: We put a tall header on the left page, and no header at all at the right page. As we can't change the actual \cs{headheight} without page breaks, we simulate this again with \cs{vspace} like in previous sections. We do this again with \cs{afterpage}, but in the  \cs{afterpage} we have to check if we are on an even or odd page. On an even page we use the technique from section~\ref{sec:afterpage}, on an odd page we insert a negative \cs{vspace} to compensate for the header stuff like in section~\ref{sec:vspace}:\\[1ex]
+\verb|\vspace*{-\dimeval{\headheight+\headsep+\topskip}}|.
+
+We define a pagestyle \texttt{evenodd} to be used on these pages with
+the tall header on the even pages and an empty header on the odd pages.
+
+\begin{verbatim}
+\newcommand\evenhead{%
+  \fancycenter{\fancyhdrbox[T]{\includegraphics[height=2cm]{example-image}}}
+              {}
+              {\Huge\fancyhdrbox[T]{EVEN PAGE HEADER\\SECOND LINE}}}
+
+\fancypagestyle{evenodd}{%
+  \fancyhf{}
+  \fancyhead[LE]{\smash{\evenhead}}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+\end{verbatim}
+% \end{boxedminipage}
+% 
+% \bigskip
+% 
+% \noindent
+% \begin{boxedminipage}{\textwidth}
+Then we define a command \cs{nextpage}, to be executed in the
+\cs{afterpage}, which calls \verb|\thispagestyle{evenodd}|,
+inserts the proper \cs{vspace} and launches
+a new \cs{afterpage}. We start it with \verb|\afterpage{\nextpage}|
+and we can stop the cycle with \verb|\renewcommand{\nextpage}{}|.
+
+\begin{verbatim}
+\newcommand{\nextpage}{%
+  \thispagestyle{evenodd}%
+  \ifodd\value{page}%
+    \vspace*{-\dimeval{\headheight+\headsep+\topskip}}%
+  \else
+    \vspace*{2cm}%
+  \fi
+  \afterpage{\nextpage}%
+}
+
+\afterpage{\nextpage}
+\end{verbatim}
+\end{boxedminipage}
+
+\bigskip
+
+\lipsum
+
+% Switch off the special headers
+\renewcommand{\nextpage}{}
+
+\lipsum
+
+\section*{Landscape pages in a portrait document}
+\label{sec:landscape1}
+
+Sometimes you want one page or a few pages in a `portrait' document to
+be in `landscape' orientation.\footnote{A portrait page has a height
+  that is greater than its width; a landscape page has a width that is
+  greater than its height.}
+This is often used when there is a particularly wide table or figure
+that doesn't fit in the normal text width.
+
+There are various ways to do this, and there are some options that have to be considered, for example
+\begin{itemize}
+\item do we want only the text body to be rotated,
+\item or also the headers and footers of the page?
+\item will the page also be rotated on the screen if we view it?
+\end{itemize}
+
+\section{Using \texttt{sidewaystable} or \texttt{sidewaysfigure}}
+\label{sec:sideways}
+
+One way to do this is to use the \texttt{rotating} package. It has an environment \texttt{sidewaystable} to insert a table in landscape orientation, like the following:%
+\footnote{Example borrowed from the Springer Nature LaTeX authoring template, \url{https://www.springernature.com/gp/authors/campaigns/latex-author-support}.}
+
+\begin{sidewaystable}
+\caption{Tables which are too wide to fit, can be written using the `\texttt{sidewaystable}' environment as shown here}
+\begin{tabular*}{\textheight}{@{\extracolsep\fill}lcccccc}
+\toprule
+& \multicolumn{3}{@{}c@{}}{Element 1}& \multicolumn{3}{@{}c@{}}{Element 2} \\\cmidrule{2-4}\cmidrule{5-7}%
+Projectile & Energy	& $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+\midrule
+Element 3 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+Element 4 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+Element 5 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+Element 6 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+\bottomrule
+\end{tabular*}
+\end{sidewaystable}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\begin{sidewaystable}
+\caption{Tables which are too wide to fit, can be written
+         using the `sidewaystable' environment as shown here}
+\begin{tabular*}{\textheight}...
+. . .
+\end{tabular*}
+\end{sidewaystable}
+\end{verbatim}
+\end{boxedminipage}
+
+\medskip
+
+Note the following:
+\begin{itemize}
+\item There is also a similar \texttt{sidewaysfigure} environment for figures, as well as other commands and environments to rotate other contents.
+\item Only the \texttt{table}/\texttt{figure} is rotated, including its caption. In particular the page header and footer are not rotated. This makes sense for printed material, like journals and books. It also means it doesn't affect \texttt{fancyhdr} usage.
+\item The page itself is not rotated. This also makes sense for printed material, but makes it difficult to read on screen.
+\item The width and height of the page are not changed. Therefore the width that is available for the table or figure is \cs{textheight}, not \cs{textwidth}.\\
+So we use \verb|\begin{tabular*}{\textheight}|.
+\item The \texttt{sidewaystable}/\texttt{sidewaysfigure} occupies a separate page, which is a float page. Because it floats, it doesn't break the main text.
+\item There can only be one \texttt{sidewaystable}/\texttt{sidewaysfigure} on a page.
+\item It cannot cross multiple pages, so it cannot be used for a landscape \texttt{longtable} that needs more than one page.
+\end{itemize}
+
+\section{Using the package \texttt{(pdf)lscape}}
+\label{sec:lscape}
+
+Another way to do this is to use the \texttt{lscape} package. It has an environment \texttt{landscape} that typesets its contents in landscape orientation. The environment can span several pages and is therefore suitable for use with \texttt{longtable}.
+We use it here with the same table as section~\ref{sec:sideways}.
+
+\medskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\usepackage[pdftex]{lscape}
+. . .
+\begin{landscape}
+  \begin{table}
+    \caption{Tables which are too wide to fit, ...}
+    \begin{tabular*}{\linewidth}...
+      . . .
+    \end{tabular*}
+  \end{table}
+\end{landscape}
+\end{verbatim}
+\end{boxedminipage}
+
+\medskip
+
+There are some differences with the `sideways\ldots' solution:
+\begin{itemize}
+\item As mentioned above, it can span several pages.
+\item The contents can be any text, not just tables or figures.
+\item Tables and figures in the \texttt{landscape} environment float within this environment, not outside of it.
+\item The \texttt{landscape} environment introduces a page break (\cs{clearpage}) at both ends, which can lead to partially filled pages.
+\item \cs{textheight} is set inside of the environment to the height of the rotated page, which is the value of \cs{textwidth} outside of the environment. On the other hand, \cs{textwidth} is not changed. However, the width of the rotated page is available in \cs{hsize}, \cs{columnwidth} and  \cs{linewidth}. Therefore, we use \verb|\begin{tabular*}{\linewidth}| here.
+\item The \texttt{pdflscape} package is an extension of \texttt{lscape} that makes the \texttt{landscape} pages also to be rotated in the PDF file, so that it will be more pleasant to read on screen. This can also be achieved with \verb|\usepackage[pdftex]{lscape}|, but this works only with \texttt{pdflatex}, whereas \texttt{pdflscape} works with a variety of \LaTeX{} processors, including routes like via DVI and \texttt{dvips}.
+\end{itemize}
+
+\begin{landscape}
+  \begin{table}
+    \caption{Tables which are too wide to fit, can be put in a `\texttt{landscape}' environment}
+    \begin{tabular*}{\linewidth}{@{\extracolsep\fill}lcccccc}
+      \toprule
+      & \multicolumn{3}{@{}c@{}}{Element 1}& \multicolumn{3}{@{}c@{}}{Element 2} \\\cmidrule{2-4}\cmidrule{5-7}%
+      Projectile & Energy	& $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+      \midrule
+      Element 3 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 4 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      Element 5 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 6 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      \bottomrule
+    \end{tabular*}
+  \end{table}
+\end{landscape}
+
+
+\section{Using the package \texttt{typearea}}
+
+In all the previous sections, we implemented a landscape page by rotating the text body of the page, and maybe instructing the PDF processor to show the whole page rotated on the screen. But we did not change the page size or paper size. In the next two sections we are going to do just that: we will change the page size, and correspondingly the size of the text on the page, so that its width will be greater than its height. And we will not rotate any part of it. So then finally we will have landscape pages with the headers and footers on the long side, i.e. parallel to the text.
+
+The first solution will use the \texttt{typearea} package. This package
+is part of the `KOMA-Script' bundle by Markus Kohm\footnote{Currently
+  maintained by Frank Neukam, Markus Kohm and Axel Kielhorn}. This is a
+collection of documentclasses and supporting packages that offer
+documents in European style. When using one of the KOMA-Script
+documentclasses, e.g. \texttt{scrbook}, \texttt{scrreprt}, or
+\texttt{scrartcl}, \texttt{typearea} is automatically loaded, so you
+should not load it yourself. However, \texttt{typearea} works also with
+other documentclasses, e.g. \texttt{book}, \texttt{report} and
+\texttt{article}. So if you want to use it you have to add
+\verb|\usepackage{typearea}| to your preamble in these cases.
+
+The main purpose of \texttt{typearea} is to calculate optimal (in a typographic sense) page layouts. So it determines the margins, text width and height, etc. of the document in a typographically good way. See the documentation of KOMA-Script\footnote{Use the command `\texttt{texdoc typearea}'}.
+
+But \texttt{typearea} can also be used to change the page size if given the proper options. \texttt{typearea} overlaps some functionality of the \texttt{geometry} package, but they both have functions that the other one doesn't have. In the next section we will see how these can work together.
+
+For now, let's see how we can use \texttt{typearea} to put one page (or several pages) in landscape mode.
+
+We have to tell \texttt{typearea} that when it changes the paper size it should communicate that to the PDF processor. This is done with the \texttt{pagesize} option. Usually this option finds out which PDF processor is used, otherwise we have to tell it, for example by using \texttt{pagesize=pdftex} or \texttt{pagesize=luatex} in the \cs{usepackage} command.
+
+We can also give options with the \cs{KOMAoptions} command as shown below.
+
+So here is the code for a landscape page.
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\usepackage[pagesize]{typearea}
+. . .
+\newlength\origtextwidth
+\setlength\origtextwidth\textwidth
+\fancyhfoffset{0pt}
+. . .
+\begin{document}
+. . .
+\storeareas\normalpapersize
+\clearpage
+\KOMAoptions{paper=landscape, pagesize}
+\areaset{\textheight}{\origtextwidth}
+\recalctypearea
+
+Landscape Section
+
+\clearpage
+\normalpapersize
+\end{verbatim}
+\end{boxedminipage}
+
+\medskip
+
+Note: we have to do a \cs{clearpage} (or  \cs{newpage} or  \cs{cleardoublepage}) before and after the landscape page, because we can't change the page size mid-page. The \texttt{typearea} commands don't do this, so if you leave them out you get a strange mix of already changed paper size on the current page, with the then current text width and height .
+
+The command \verb|\storeareas\normalpapersize| stores the current page layout variables in the macro \cs{normalpapersize}, and we use that after the landscape page to reset the page layout to the saved value.
+
+Also note that we use the command \verb|\fancyhfoffset{0pt}|. This makes sure that changes to  \cs{textwidth} are also applied to  \cs{headwidth}. Otherwise you get a narrow header and footer on a wide page. Of course if you already had a \cs{fancyhfoffset} that would be sufficient.
+
+The command \verb|\areaset{\textheight}{\origtextwidth}| sets the width and height of the text area of the new page to its two parameters\footnote{These is also an optional parameter that is of no concern in this example.}. We want to swap the width and height of the page, so to set them to \cs{textheight} and \cs{textwidth}, but this command sets \cs{textwidth} to its first argument and then \cs{textheight} to the second argument. So we can't use \cs{textwidth} for the second argument as it would have been overwritten when \cs{areaset} uses it. Therefore we save it first in  \cs{origtextwidth} and use that. For symmetry reasons we could have done this also for \cs{textheight}.
+
+Finally we call \cs{recalctypearea} which recalculates the page size related variables.
+
+
+\newlength\origtextwidth
+\setlength\origtextwidth\textwidth
+\fancyhfoffset[R]{0pt}
+
+\storeareas\normalpapersize
+\clearpage
+\KOMAoptions{paper=landscape, pagesize}
+\areaset{\textheight}{\origtextwidth}
+\recalctypearea
+
+\subsection*{Landscape section}
+
+  \begin{table}[hpt]
+    \caption{Tables which are too wide to fit, can be put in a `\texttt{landscape}' environment}
+    \label{subsec:typearea}
+    \begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc}
+      \toprule
+      & \multicolumn{3}{@{}c@{}}{Element 1}& \multicolumn{3}{@{}c@{}}{Element 2} \\\cmidrule{2-4}\cmidrule{5-7}%
+      Projectile & Energy	& $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+      \midrule
+      Element 3 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 4 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      Element 5 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 6 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      \bottomrule
+    \end{tabular*}
+  \end{table}
+
+\clearpage
+\normalpapersize
+
+\section{Using the packages \texttt{typearea} and \texttt{geometry}}
+
+You may notice that in the previous landscape page (page~\pageref{subsec:typearea}) does have quite a lot of unused horizontal space on both sides. If we want to put a particularly wide table or figure on this page, this would be a waste. The reason is that the standard page dimensions of \LaTeX's \texttt{article} class are quite a bit smaller than the A4 page that we use. Also \texttt{typearea} reserves a fair amount of space for the `marginpar' area, on page~\pageref{subsec:typearea} this is on the right.
+
+One way to use this extra space is to include the marginpar in the first argument of \cs{areaset}:\\[.5ex]
+\verb|\areaset{\dimeval{\textheight+\marginparsep+\marginparwidth}}{\origtextwidth}|
+\vspace{.5ex}
+
+Another way is to use the \texttt{geometry} package, which gives us much more control of the page layout. If we do this, we abandon the calculations that \texttt{typearea} makes to get a nice typographic layout.
+
+We can combine the features of \texttt{typearea} and \texttt{geometry}, so that we can change to landscape mid-document (which can't be done with \texttt{geometry}), and still prescribe our own margins, etc. with the \cs{newgeometry} command. For this we have to tell \texttt{typearea} that it should share its calculations with \texttt{geometry} by giving it the \texttt{usegeometry} option.
+
+\noindent\verb|\usepackage[usegeometry]{typearea}|\\
+or\\
+\verb|\KOMAoptions{usegeometry}|
+
+So here is an example:
+
+\medskip
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\clearpage
+\KOMAoptions{paper=landscape, pagesize, usegeometry}
+\recalctypearea
+\newgeometry{% geometry settings
+  margin=3cm, headheight=14pt, includeheadfoot
+}%
+
+Landscape section
+
+\restoregeometry
+\normalpapersize
+\end{verbatim}
+\end{boxedminipage}
+
+\medskip
+
+The initial \cs{clearpage} is necessary, because without it, the page size change would be applied to the current page.
+
+We can leave out the \cs{areaset} because the area size will be set by \cs{newgeometry}.
+However we need \cs{recalctypearea} to send the paper size information to \texttt{geometry}.
+
+At the end, the effect of the \cs{restoregeometry} is overridden by \cs{normalpapersize}, but we give it anyway because it is the proper way to end a \cs{newgeometry}. If we would leave it out we would need a  \cs{clearpage} anyway to start a new page for the return to portrait mode.
+And the \cs{normalpapersize} is necessary to change the papersize to portrait, because  \cs{restoregeometry} doesn't do that.
+
+\clearpage
+\KOMAoptions{paper=landscape, pagesize, usegeometry}
+\recalctypearea
+\newgeometry{% geometry settings
+  margin=3cm, headheight=14pt, includeheadfoot
+}%
+
+\subsection*{Landscape section with \texttt{geometry (margin=3cm)}}
+
+  \begin{table}[hpt]
+    \caption{Tables which are too wide to fit, can be put in a `\texttt{landscape}' environment}
+    \begin{tabular*}{\linewidth}{@{\extracolsep\fill}lcccccc}
+      \toprule
+      & \multicolumn{3}{@{}c@{}}{Element 1}& \multicolumn{3}{@{}c@{}}{Element 2} \\\cmidrule{2-4}\cmidrule{5-7}%
+      Projectile & Energy	& $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+      \midrule
+      Element 3 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 4 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      Element 5 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+      Element 6 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+      \bottomrule
+    \end{tabular*}
+  \end{table}
+
+\restoregeometry
+\normalpapersize
+
+\subsection*{Return to portrait mode}
+
+\lipsum[1-2]
+
+\section{An A3 page in an A4 document}
+
+We finish by inserting an A3 page in an A4 document.
+
+We do this by telling \texttt{typearea} to use an A3 page in landscape more with \cs{KOMAoptions}, and then change the text area with \cs{areaset}.
+Because the A3 page is twice as wide as the A4 page, we can just add half of the width of the A3 paper (which would be the width of the A4 paper) to the text width. In this way we keep the same margins.
+
+\medskip
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+\begin{verbatim}
+\clearpage
+\KOMAoptions{paper=A3, paper=landscape, pagesize}
+\areaset{\dimeval{\textwidth+.5\paperwidth}}{\textheight}
+
+A3 page contents
+
+\clearpage
+\normalpapersize
+\end{verbatim}
+\end{boxedminipage}
+
+\clearpage
+\KOMAoptions{paper=A3, paper=landscape, pagesize}
+\areaset{\dimeval{\textwidth+.5\paperwidth}}{\textheight}
+%\recalctypearea
+
+\setlength{\columnsep}{5cm}
+\begin{multicols}{2}
+  
+\lipsum% Placed on A3
+
+\end{multicols}
+
+\clearpage
+\normalpapersize
+
+\section*{Back on A4}
+
+\lipsum[1-3]% Placed on A4 again
+
+
+\end{document}
