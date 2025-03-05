@@ -79,7 +79,7 @@ We use the standard \LaTeX{} right mark, which will be set by both the \verb|\se
 
 We also have to check whether there is a \verb|\section| or \verb|\subsection| command at or near the top of the page, because if there is, we take its title in the header, instead of the previous one.
 
-This check is done in the macro \verb|\checkposinpage| which we call at the beginning of the \verb|\[sub]section| command by means of a hook. The result is recorded in the variable \verb|\whichpage|. This is then used in \verb|\sectionmark| and  \verb|\sectionmark| to store it in the mark \texttt{whichpage}. Because both marks are very similar, we define a macro \verb|\setmarks| to do the job.
+This check is done in the macro \verb|\checkposinpage| which we call at the beginning of the \verb|\[sub]section| command by means of a hook. The result is recorded in the variable \verb|\whichpage|. This is then used in \verb|\sectionmark| and  \verb|\subsectionmark| to store it in the mark \texttt{whichpage}. Because both marks are very similar, we define a macro \verb|\setmarks| to do the job.
 
 \begin{verbatim}
 \NewMarkClass{whichpage}
