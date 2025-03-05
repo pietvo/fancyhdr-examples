@@ -1,0 +1,187 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{boxedminipage}
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\newcommand{\DEBUG}[1]{\message{#1}\ignorespaces} % Choose this for debugging
+%\newcommand{\DEBUG}[1]{}             % Choose this for no debugging
+
+\NewMarkClass{whichpage}
+\newcommand\whichpage{}
+
+\newcounter{thispage}
+
+\newcommand\checkposinpage{
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}%
+    {\renewcommand{\whichpage}{top\thepage}}%
+    {\renewcommand{\whichpage}{\thepage}}%
+  \setcounter{thispage}{\thepage}% Only for the documentation
+}
+
+\fancypagestyle*{fancy}{%
+  \fancyhf{}
+  \fancyhead[L]{%
+    \ifthenelse{\equal{\FirstMark{whichpage}}{\thepage}}%
+      {\DEBUG{Page \thepage, normal header^^J}%
+       \TopMark{2e-left}}%
+      % whichpage != page
+      {\IfMarksEqualTF{whichpage}{top}{first}%
+        {\DEBUG{Page \thepage, no section on this page^^J}%
+         \TopMark{2e-left}}% no mark on this page
+        {\DEBUG{Page \thepage, section at/near the top of the page^^J}%
+         \FirstMark{2e-left}}% title at/near the top of the page
+      }%
+  }
+  \fancyfoot[C]{\thepage}
+}
+
+\AddToHook{cmd/section/before}{\checkposinpage}
+
+\renewcommand{\sectionmark}[1]{%
+  \InsertMark{whichpage}{\whichpage}%
+  \markboth{\thesection\quad#1}{}%
+}
+
+\begin{document}
+\section*{Example 37}
+
+\noindent
+\begin{boxedminipage}{\textwidth}
+This is example 37, a variant of example 36 in the \texttt{fancyhdr} documentation.
+
+In this document we put the title of the section that is active at the top of the page in the page header. In other words, the last one on a previous page.
+
+\textbf{NOTE: This requires a \LaTeX{} kernel that has the new marks mechanism (November 2022 or later).}
+
+We use the standard \LaTeX{} left mark, which will be set by the \verb|\section| command.
+
+We also have to check whether there is a \verb|\section| command at or near the top of the page, because if there is, we take its title in the header, instead of the previous one.
+
+This check is done in the macro \verb|\checkposinpage| which we call at the beginning of the \verb|\section| command by means of a hook. The result is recorded in the variable \verb|\whichpage|. This is then used in \verb|\sectionmark| to store it in the mark \texttt{whichpage}.
+
+The difference between this example and example 36 is that here we use only the section titles, not the subsection titles, and we use the left mark rather than the right mark.
+
+\begin{verbatim}
+\NewMarkClass{whichpage}
+\newcommand\whichpage{}
+
+\newcommand\checkposinpage{
+  \ifthenelse{\lengthtest{\pagetotal<4\baselineskip}}%
+    {\renewcommand{\whichpage}{top\thepage}}%
+    {\renewcommand{\whichpage}{\thepage}}%
+}
+
+\AddToHook{cmd/section/before}{\checkposinpage}
+
+\renewcommand{\sectionmark}[1]{%
+  \InsertMark{whichpage}{\whichpage}%
+  \markboth{\thesection\quad#1}{}%
+}
+\end{verbatim}
+\end{boxedminipage}
+
+%\newpage
+\noindent
+\begin{boxedminipage}{\textwidth}
+Then in the header we check if \texttt{whichpage} is equal to the actual page number \verb|\thepage|. The algorithm is:\\[1ex]
+%
+\textbf{if} \texttt{whichpage} = \verb|\thepage| (i.e., no section at or near top)\\
+\textbf{then}\\
+\hspace*{2em} use last section from a previous page\\
+\textbf{else} (\texttt{whichpage} $\ne$ \verb|\thepage|)\\
+\hspace*{2em} \textbf{if} there is no \texttt{whichpage} mark on this page\\
+\hspace*{3em} (this means the  \texttt{whichpage} mark is not valid for this page)\\
+\hspace*{2em} \textbf{then} use last section from a previous page\\
+\hspace*{2em} \textbf{else} (there is a section title at/near the top of the page)\\
+\hspace*{3em} use first section of current page\\
+\textbf{fi}
+
+\begin{verbatim}
+\fancypagestyle*{fancy}{%
+  \fancyhf{}
+  \fancyhead[L]{%
+    \ifthenelse{\equal{\FirstMark{whichpage}}{\thepage}}%
+      {\TopMark{2e-left}}%
+      % whichpage != page
+      {\IfMarksEqualTF{whichpage}{top}{first}%
+        {\TopMark{2e-left}}% no mark on this page
+        {\FirstMark{2e-left}}% title at/near the top of the page
+      }%
+  }
+  \fancyfoot[C]{\thepage}
+}
+\end{verbatim}
+
+The code that compares the page numbers can be seen in action in section~\ref{sec:push} on page~\pageref{sec:push} and section~\ref{sec:newpage} on page~ \pageref{sec:newpage}.
+\end{boxedminipage}
+
+\newpage
+\pagestyle{fancy}
+
+\section{Section One}
+
+\subsection{Subsection One}
+
+ \lipsum[1-2]
+
+\section{Section Two}
+
+ \lipsum[3]
+
+\subsection{Subsection Two}
+\label{sec:inherited}
+
+ \lipsum[4-7]
+
+\section{Third section}
+
+\lipsum[1-2]
+
+\section{Fourth section}
+\label{sec:missing}
+
+{\bfseries This section starts close to the top of the page. Therefore this section title will be used in the header of this page.}
+
+\medskip
+
+\lipsum[3-4]
+
+\subsection{A Fourth Subsection}
+
+\lipsum[7-9]
+
+\section{Fifth section}
+
+\lipsum[1-5]
+
+\subsection{Fifth subsection}
+
+\lipsum[8-10]
+
+\section{Sixth section}
+\label{sec:push}
+
+{\bfseries This section is processed at the bottom of page~\thethispage. But as you can see, it has been pushed to page~\pageref{sec:push}, which causes it to appear at the top of this page.}\\
+Therefore the code that checks if \verb|\FirstMark{whichpage}| is equal to \verb|\thepage| makes it put the current section title in the header.
+(\verb|\FirstMark{whichpage}| = \thethispage{} and  \verb|\thepage| = \pageref{sec:push}).
+
+\medskip
+
+\lipsum[1-6]
+
+\subsection{Sixth subsection}
+
+\lipsum[7]
+
+\newpage
+\section{Seventh section after a page break}
+\label{sec:newpage}
+
+{\bfseries Because this section starts at the top of the page, we use this section title in the header.}
+
+\medskip
+
+\lipsum[8-10]
+
+\end{document}
